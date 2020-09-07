@@ -18,9 +18,27 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+## Built With
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Angular 10.0.3
+Git - Version-control system
+NPM - Node Package Management
+
+## Versioning
+
+We use GitFlow for versioning. For the versions available, see the tags on this repository.
+
+## Author
+
+Santiago Rubiano Fierro Software Engineering Student
+Alejandro Bohorquez Alzate Software Engineering Student
+Davor Cortez Cardozo Software Engineering Student
+
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details.
+
 
 ## Further help
 
