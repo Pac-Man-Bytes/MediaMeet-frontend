@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "MediaMeet-frontend"
+    }
+  },
+  "defaultProject": "MediaMeet-frontend",
+  "cli": {
+    "analytics": "a24cf975-24c6-4b9c-adda-8d7d6a6c318b"
+  }
 }
