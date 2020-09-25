@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChatComponent } from './chat/chat.component';
 import { MainComponent } from './main/main.component';
 import { HttpClientModule } from '@angular/common/http';
-
+import {MediaService} from './services/media-service.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,12 +18,12 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
     AppRoutingModule,
     FlexLayoutModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [MediaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

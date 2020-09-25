@@ -1,4 +1,6 @@
 
 export class Media{
-    id:string; 
+    id:string;
+    title:string;
+    image:string;
 }
