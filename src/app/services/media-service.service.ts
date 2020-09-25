@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable }  from 'rxjs';
-import { map } from 'rxjs/operators'
+import { Observable, throwError } from 'rxjs';
+import swal from 'sweetalert2';
+import {catchError, map} from 'rxjs/operators';
 import {HttpClient} from '@angular/common/http';
 import { Media } from '../models/media';
 import { Router } from '@angular/router';
@@ -8,14 +9,18 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class MediaService {
-  urlEndPoint:string = "http://localhost:8080/api/media/youtube"
+  urlEndPoint = 'http://localhost:8080/api/media/youtube';
   constructor(private http: HttpClient, private router: Router) { }
-  getClientes(): Observable<Media> {
-    //Convertir el listado de clientes en un observable o Stream
-    // return of(CLIENTES);
-    //return this.http.get<Cliente[]>(this.urlEndPoint);
-    return this.http.get(this.urlEndPoint).pipe(
-      map(response => response as Media)
+  getVideo(query: string): Observable<Media> {
+    return this.http.get<Media>(`${this.urlEndPoint}/${query}`).pipe(
+      catchError(e => {
+        if (e.status === 400){
+          return throwError(e);
+        }
+        console.error(e.error.mensaje);
+        swal.fire(e.error.mensaje, 'error');
+        return throwError(e);
+      })
     );
   }
 }
