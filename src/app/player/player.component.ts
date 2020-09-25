@@ -11,6 +11,7 @@ export class PlayerComponent implements OnInit {
   public video: string;
   public player: any;
   public reframed = false;
+  public query: string;
   constructor() { }
   ngOnInit(): void {
     this.init();

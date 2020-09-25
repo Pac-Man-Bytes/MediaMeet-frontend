@@ -6,37 +6,30 @@ import { AppComponent } from './app.component';
 import { PlayerComponent } from './player/player.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ChatComponent } from './chat/chat.component';
-import { MainComponent } from './main/main.component';
 import {MediaService} from './services/media-service.service';
-import { LoginComponent } from './login/login.component';
+import { RoomComponent } from './room/room.component';
 import {RouterModule, Routes} from '@angular/router';
-import { NavbarComponent } from './navbar/navbar.component';
-import { RegisterComponent } from './register/register.component';
-import {FormsModule} from '@angular/forms';
+
 const routes: Routes = [
-  {path: 'user/login', component: LoginComponent},
-  {path: 'user/register', component: RegisterComponent},
-  {path: 'player', component: PlayerComponent}
+    {path: 'room', component: RoomComponent},
+    {path: 'chat', component: ChatComponent}
 ];
 @NgModule({
   declarations: [
     AppComponent,
     PlayerComponent,
     ChatComponent,
-    MainComponent,
-    LoginComponent,
-    NavbarComponent,
-    RegisterComponent,
+    RoomComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FlexLayoutModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(routes),
-    FormsModule
+    RouterModule.forRoot(routes)
   ],
   providers: [MediaService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }
