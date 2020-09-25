@@ -1,20 +1,25 @@
-import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import swal from 'sweetalert2';
-import {catchError, map} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { Media } from '../models/media';
-import { Router } from '@angular/router';
+import {catchError} from 'rxjs/operators';
+import {Observable, throwError} from 'rxjs';
+import {Media} from '../clases/media';
+import {Router} from '@angular/router';
+import swal from 'sweetalert2';
+
 @Injectable({
   providedIn: 'root'
 })
-export class MediaService {
+export class DataAPIService {
+
   urlEndPoint = 'http://localhost:8080/api/media/youtube';
-  constructor(private http: HttpClient, private router: Router) { }
+
+  constructor(private http: HttpClient, private router: Router) {
+  }
+
   getVideo(query: string): Observable<Media> {
     return this.http.get<Media>(`${this.urlEndPoint}/${query}`).pipe(
       catchError(e => {
-        if (e.status === 400){
+        if (e.status === 400) {
           return throwError(e);
         }
         console.error(e.error.mensaje);

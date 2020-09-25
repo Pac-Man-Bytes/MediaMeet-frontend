@@ -1,5 +1,4 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Media} from '../models/media';
 import reframe from 'reframe.js';
 @Component({
   selector: 'app-player',
@@ -33,7 +32,7 @@ export class PlayerComponent implements OnInit {
         }
       });
     };
-    }
+  }
   init(): void {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';

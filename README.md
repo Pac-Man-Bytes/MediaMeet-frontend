@@ -1,6 +1,6 @@
 # MediaMeetFrontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.3.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.1.
 
 ## Development server
 
@@ -18,27 +18,9 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Built With
+## Running end-to-end tests
 
-Angular 10.0.3
-Git - Version-control system
-NPM - Node Package Management
-
-## Versioning
-
-We use GitFlow for versioning. For the versions available, see the tags on this repository.
-
-## Author
-
-Santiago Rubiano Fierro Software Engineering Student
-Alejandro Bohorquez Alzate Software Engineering Student
-Davor Cortez Cardozo Software Engineering Student
-
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE.md file for details.
-
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ## Further help
 

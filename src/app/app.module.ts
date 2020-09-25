@@ -1,35 +1,37 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { PlayerComponent } from './player/player.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ChatComponent } from './chat/chat.component';
-import {MediaService} from './services/media-service.service';
-import { RoomComponent } from './room/room.component';
-import {RouterModule, Routes} from '@angular/router';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-const routes: Routes = [
-    {path: 'room', component: RoomComponent},
-    {path: 'chat', component: ChatComponent}
-];
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {HomeComponent} from './components/home/home.component';
+import {NavbarComponent} from './components/navbar/navbar.component';
+import {RoomComponent} from './components/room/room.component';
+import {PlayerComponent} from './components/player/player.component';
+import {LoginComponent} from './components/user/login/login.component';
+import {RegisterComponent} from './components/user/register/register.component';
+import {Page404Component} from './components/page404/page404.component';
+import {ChatComponent} from './components/chat/chat.component';
+// Services
+import {DataAPIService} from './services/data-api.service';
+
 @NgModule({
   declarations: [
     AppComponent,
-    PlayerComponent,
-    ChatComponent,
+    HomeComponent,
+    NavbarComponent,
     RoomComponent,
+    PlayerComponent,
+    LoginComponent,
+    RegisterComponent,
+    Page404Component,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    FlexLayoutModule,
-    BrowserAnimationsModule,
-    RouterModule.forRoot(routes)
+    AppRoutingModule
   ],
-  providers: [MediaService],
-  bootstrap: [AppComponent],
-
+  providers: [DataAPIService],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

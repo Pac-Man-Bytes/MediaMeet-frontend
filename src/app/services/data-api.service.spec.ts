@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MediaService } from './media-service.service';
+import { DataAPIService } from './data-api.service';
 
-describe('MediaService', () => {
-  let service: MediaService;
+describe('DataAPIService', () => {
+  let service: DataAPIService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MediaService);
+    service = TestBed.inject(DataAPIService);
   });
 
   it('should be created', () => {
