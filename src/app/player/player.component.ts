@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Media} from '../models/media'
+import {Media} from '../models/media';
 import reframe from 'reframe.js';
 @Component({
   selector: 'app-player',
@@ -10,26 +10,20 @@ export class PlayerComponent implements OnInit {
   public YT: any;
   public video: string;
   public player: any;
-  public reframed: Boolean = false;
+  public reframed = false;
   constructor() { }
-  init:void() {
-    let tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    let firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-  }
-  ngOnInit() {
+  ngOnInit(): void {
     this.init();
-    this.video = '1cH2cerUpMQ' //video id
+    this.video = '1cH2cerUpMQ';
     window['onYouTubeIframeAPIReady'] = (e) => {
       this.YT = window['YT'];
       this.reframed = false;
       this.player = new window['YT'].Player('player', {
         videoId: this.video,
         events: {
-          'onStateChange': this.onPlayerStateChange.bind(this),
-          'onError': this.onPlayerError.bind(this),
-          'onReady': (e) => {
+          onStateChange: this.onPlayerStateChange.bind(this),
+          onError: this.onPlayerError.bind(this),
+          onReady: (e) => {
             if (!this.reframed) {
               this.reframed = true;
               reframe(e.target.a);
@@ -38,41 +32,47 @@ export class PlayerComponent implements OnInit {
         }
       });
     };
+    }
+  init(): void {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
-  onPlayerStateChange(event) {
-    console.log(event)
+
+  onPlayerStateChange(event): void {
+    console.log(event);
     switch (event.data) {
       case window['YT'].PlayerState.PLAYING:
-        if (this.cleanTime() == 0) {
+        if (this.cleanTime() === 0) {
           console.log('started ' + this.cleanTime());
         } else {
-          console.log('playing ' + this.cleanTime())
-        };
+          console.log('playing ' + this.cleanTime());
+        }
         break;
       case window['YT'].PlayerState.PAUSED:
-        if (this.player.getDuration() - this.player.getCurrentTime() != 0) {
+        if (this.player.getDuration() - this.player.getCurrentTime() !== 0) {
           console.log('paused' + ' @ ' + this.cleanTime());
-        };
+        }
         break;
       case window['YT'].PlayerState.ENDED:
         console.log('ended ');
         break;
-    };
-  };
-  //utility
-  cleanTime() {
-    return Math.round(this.player.getCurrentTime())
-  };
-  onPlayerError(event) {
+    }
+  }
+  cleanTime(): number {
+    return Math.round(this.player.getCurrentTime());
+  }
+  onPlayerError(event): void {
     switch (event.data) {
       case 2:
-        console.log('' + this.video)
+        console.log('' + this.video);
         break;
       case 100:
         break;
       case 101 || 150:
         break;
-    };
-  };
+    }
+  }
 }
 
