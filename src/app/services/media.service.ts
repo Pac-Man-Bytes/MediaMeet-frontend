@@ -16,13 +16,6 @@ export class MediaService {
 
   constructor(private http: HttpClient, private router: Router) {
   }
-
-  // getVideo(query: string): Observable<HttpEvent<{}>> {
-  //
-  //   const req = new HttpRequest('GET', `${this.urlEndPoint}`, new Query(query), {
-  //     reportProgress: true
-  //   });
-  //   return this.http.request(req);
   getVideo(query: string): Observable<Media> {
     const text = '?query='.concat(query);
 
