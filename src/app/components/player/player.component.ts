@@ -1,9 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import reframe from 'reframe.js';
-import {Observable} from 'rxjs';
 import {Media} from '../../clases/media';
 import {MediaService} from '../../services/media.service';
-import {printLine} from 'tslint/lib/verify/lines';
 
 @Component({
   selector: 'app-player',
