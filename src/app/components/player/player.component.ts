@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import reframe from 'reframe.js';
+import {Observable} from 'rxjs';
+import {Media} from '../../clases/media';
+import {MediaService} from '../../services/media.service';
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
@@ -7,14 +10,14 @@ import reframe from 'reframe.js';
 })
 export class PlayerComponent implements OnInit {
   public YT: any;
-  public video: string;
+  public video = '';
+  public media: Media;
   public player: any;
   public reframed = false;
   public query: string;
-  constructor() { }
+  constructor(private mediaService: MediaService) { }
   ngOnInit(): void {
     this.init();
-    this.video = '1cH2cerUpMQ';
     window['onYouTubeIframeAPIReady'] = (e) => {
       this.YT = window['YT'];
       this.reframed = false;
@@ -73,6 +76,14 @@ export class PlayerComponent implements OnInit {
       case 101 || 150:
         break;
     }
+  }
+  onEnter(query: string): void{
+    this.mediaService.getVideo(query).subscribe(media => {
+        console.log(media);
+        this.video = media.id;
+        this.player.loadVideoById(media.id, 0, 'large');
+      }
+    );
   }
 }
 

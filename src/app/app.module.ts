@@ -13,7 +13,8 @@ import {Page404Component} from './components/page404/page404.component';
 import {ChatComponent} from './components/chat/chat.component';
 import {FormsModule} from '@angular/forms';
 // Services
-import {DataAPIService} from './services/data-api.service';
+import {MediaService} from './services/media.service';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -30,9 +31,10 @@ import {DataAPIService} from './services/data-api.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [DataAPIService],
+  providers: [MediaService, HttpClient],
   bootstrap: [AppComponent]
 })
 export class AppModule {
