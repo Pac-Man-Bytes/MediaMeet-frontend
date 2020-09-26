@@ -23,8 +23,10 @@ export class MediaService {
   //     reportProgress: true
   //   });
   //   return this.http.request(req);
-  getVideo(query: string): Observable<Media>{
-    return this.http.get<Media>(`${this.urlEndPoint}/${encodeURIComponent(query)}`).pipe(
+  getVideo(query: string): Observable<Media> {
+    const text = '?query='.concat(query);
+
+    return this.http.get<Media>(`${this.urlEndPoint}/${text}`).pipe(
       catchError(e => {
         if (e.status === 400) {
           return throwError(e);
@@ -35,4 +37,6 @@ export class MediaService {
       })
     );
   }
+
+
 }

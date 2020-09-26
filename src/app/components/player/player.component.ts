@@ -1,8 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import reframe from 'reframe.js';
 import {Observable} from 'rxjs';
 import {Media} from '../../clases/media';
 import {MediaService} from '../../services/media.service';
+import {printLine} from 'tslint/lib/verify/lines';
+
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
@@ -15,7 +17,10 @@ export class PlayerComponent implements OnInit {
   public player: any;
   public reframed = false;
   public query: string;
-  constructor(private mediaService: MediaService) { }
+
+  constructor(private mediaService: MediaService) {
+  }
+
   ngOnInit(): void {
     this.init();
     window['onYouTubeIframeAPIReady'] = (e) => {
@@ -36,6 +41,7 @@ export class PlayerComponent implements OnInit {
       });
     };
   }
+
   init(): void {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -63,9 +69,11 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
+
   cleanTime(): number {
     return Math.round(this.player.getCurrentTime());
   }
+
   onPlayerError(event): void {
     switch (event.data) {
       case 2:
@@ -77,7 +85,9 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
-  onEnter(query: string): void{
+
+  onEnter(query: string): void {
+    console.log(query);
     this.mediaService.getVideo(query).subscribe(media => {
         console.log(media);
         this.video = media.id;
