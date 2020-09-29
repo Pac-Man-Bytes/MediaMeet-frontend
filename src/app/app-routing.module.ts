@@ -8,7 +8,7 @@ import {Page404Component} from './components/page404/page404.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'room', component: RoomComponent}, // TODO, only users auth
+  {path: 'room/:roomId', component: RoomComponent}, // TODO, only users auth
   {path: 'user/login', component: LoginComponent},
   {path: 'user/register', component: RegisterComponent},
   {path: '**', component: Page404Component}

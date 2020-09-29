@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {PlayerComponent} from '../player/player.component';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-room',
@@ -7,7 +7,12 @@ import {PlayerComponent} from '../player/player.component';
   styleUrls: ['./room.component.css']
 })
 export class RoomComponent implements OnInit {
-  constructor() { }
+  public roomId;
+  constructor(private route: ActivatedRoute) {
+    this.route.params.subscribe(params => {
+      this.roomId = params['roomId'];
+    });
+  }
   ngOnInit(): void {
   }
 

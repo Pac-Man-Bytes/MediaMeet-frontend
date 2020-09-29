@@ -15,6 +15,7 @@ import {FormsModule} from '@angular/forms';
 // Services
 import {MediaService} from './services/media.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {MatInputModule} from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatInputModule
   ],
   providers: [MediaService, HttpClient],
   bootstrap: [AppComponent]

@@ -21,11 +21,11 @@ export class PlayerComponent implements OnInit {
   public connected = false;
   public clientId: string;
   public playerState: string;
-
+  public started: boolean;
+  @Input() roomId: string;
   constructor(private mediaService: MediaService) {
     this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
   }
-
   ngOnInit(): void {
     this.client = new Client();
     this.client.webSocketFactory = () => {
@@ -35,7 +35,7 @@ export class PlayerComponent implements OnInit {
       this.client.activate();
       this.client.onConnect = (frame) => {
         this.connected = true;
-        this.client.subscribe('/room/state', e => {
+        this.client.subscribe('/room/state/' + this.roomId, e => {
           this.changeState(e);
         });
       };
@@ -62,24 +62,22 @@ export class PlayerComponent implements OnInit {
       });
     };
   }
-
   init(): void {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
-
   onPlayerStateChange(event): void {
     switch (event.data) {
       case window['YT'].PlayerState.PLAYING:
         if (this.cleanTime() === 0) {
-          console.log('started ' + this.cleanTime());
+          console.log("si");
         } else {
           const promise = this.playerChangeState('PLAYING');
           promise.then(
             () => {
-              this.client.publish({destination: '/app/state', body: 'PLAYING ' + this.cleanTime()});
+              this.client.publish({destination: '/app/state/' + this.roomId, body: 'PLAYING ' + this.cleanTime()});
             }
           );
           console.log('playing ' + this.cleanTime());
@@ -89,7 +87,9 @@ export class PlayerComponent implements OnInit {
         if (this.player.getDuration() - this.player.getCurrentTime() !== 0) {
           const promise = this.playerChangeState('PAUSED');
           promise.then(
-            () => {this.client.publish({destination: '/app/state', body: 'PAUSED ' + this.cleanTime()})}
+            () => {
+              this.client.publish({destination: '/app/state/' + this.roomId, body: 'PAUSED ' + this.cleanTime()});
+            }
           );
         }
         break;
@@ -98,6 +98,7 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
+
   playerChangeState(state): Promise<any> {
     const promise = new Promise((resolve) => {
       this.playerState = state;
@@ -105,10 +106,10 @@ export class PlayerComponent implements OnInit {
     });
     return promise;
   }
+
   cleanTime(): number {
     return Math.round(this.player.getCurrentTime());
   }
-
   onPlayerError(event): void {
     switch (event.data) {
       case 2:
@@ -130,6 +131,7 @@ export class PlayerComponent implements OnInit {
       }
     );
   }
+
   connect(): void {
     this.client.activate();
   }
@@ -137,14 +139,14 @@ export class PlayerComponent implements OnInit {
   disconnect(): void {
     this.client.deactivate();
   }
-
+  roomIdM(): void{
+    console.log(this.roomId);
+  }
   private changeState(e): void {
-    console.log('AQUI ESTOY');
     console.log(e.body.split(' ')[0], this.playerState);
     if (e.body.split(' ')[0] === 'PLAYING' && this.playerState === 'PAUSED') {
       this.player.playVideo();
     } else if (e.body.split(' ')[0] === 'PAUSED' && this.playerState === 'PLAYING') {
-      console.log('NO me pauso por que soy tonto');
       this.player.pauseVideo();
     }
   }
