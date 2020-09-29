@@ -13,7 +13,7 @@ import {Client} from '@stomp/stompjs';
 export class PlayerComponent implements OnInit {
   public YT: any;
   public video = '';
-  public media: Media;
+  public currentTrack: Media;
   public player: any;
   public reframed = false;
   public query: string;
@@ -21,11 +21,13 @@ export class PlayerComponent implements OnInit {
   public connected = false;
   public clientId: string;
   public playerState: string;
-  public started: boolean;
+  public started = false;
   @Input() roomId: string;
+
   constructor(private mediaService: MediaService) {
     this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
   }
+
   ngOnInit(): void {
     this.client = new Client();
     this.client.webSocketFactory = () => {
@@ -37,6 +39,9 @@ export class PlayerComponent implements OnInit {
         this.connected = true;
         this.client.subscribe('/room/state/' + this.roomId, e => {
           this.changeState(e);
+        });
+        this.client.subscribe('/room/videoStatus/' + this.roomId, e => {
+          this.sinchronizeVideo(e);
         });
       };
     });
@@ -62,27 +67,33 @@ export class PlayerComponent implements OnInit {
       });
     };
   }
+
   init(): void {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
+
   onPlayerStateChange(event): void {
     switch (event.data) {
       case window['YT'].PlayerState.PLAYING:
-        if (this.cleanTime() === 0) {
-          console.log("si");
-        } else {
+          const promise1 = this.setStarted();
+          promise1.then(
+            () => {
+              this.client.publish({
+                destination: '/app/videoStatus/' +
+                  this.roomId, body: JSON.stringify(this.currentTrack)
+              });
+            }
+          );
           const promise = this.playerChangeState('PLAYING');
           promise.then(
             () => {
               this.client.publish({destination: '/app/state/' + this.roomId, body: 'PLAYING ' + this.cleanTime()});
             }
           );
-          console.log('playing ' + this.cleanTime());
-        }
-        break;
+          break;
       case window['YT'].PlayerState.PAUSED:
         if (this.player.getDuration() - this.player.getCurrentTime() !== 0) {
           const promise = this.playerChangeState('PAUSED');
@@ -99,6 +110,14 @@ export class PlayerComponent implements OnInit {
     }
   }
 
+  setStarted(): Promise<any>{
+    const promise = new Promise((resolve) => {
+      this.started = true;
+      this.currentTrack.time = this.cleanTime();
+      resolve();
+    });
+    return promise;
+  }
   playerChangeState(state): Promise<any> {
     const promise = new Promise((resolve) => {
       this.playerState = state;
@@ -110,6 +129,7 @@ export class PlayerComponent implements OnInit {
   cleanTime(): number {
     return Math.round(this.player.getCurrentTime());
   }
+
   onPlayerError(event): void {
     switch (event.data) {
       case 2:
@@ -123,9 +143,8 @@ export class PlayerComponent implements OnInit {
   }
 
   onEnter(query: string): void {
-    console.log(query);
     this.mediaService.getVideo(query).subscribe(media => {
-        console.log(media);
+        this.currentTrack = media;
         this.video = media.id;
         this.player.loadVideoById(media.id, 0, 'large');
       }
@@ -139,9 +158,20 @@ export class PlayerComponent implements OnInit {
   disconnect(): void {
     this.client.deactivate();
   }
-  roomIdM(): void{
+
+  roomIdM(): void {
     console.log(this.roomId);
   }
+
+  private sinchronizeVideo(e): void {
+    const media = JSON.parse(e.body) as Media;
+    if (!this.started) {
+      console.log(media.id, media.time, 'large');
+      this.video = media.id;
+      this.player.loadVideoById(media.id, media.time, 'large');
+    }
+  }
+
   private changeState(e): void {
     console.log(e.body.split(' ')[0], this.playerState);
     if (e.body.split(' ')[0] === 'PLAYING' && this.playerState === 'PAUSED') {
