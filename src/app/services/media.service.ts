@@ -1,23 +1,25 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
 import {catchError} from 'rxjs/operators';
 import {Observable, throwError} from 'rxjs';
 import {Media} from '../clases/media';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
+import {Query} from '../clases/query';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataAPIService {
+export class MediaService {
 
   urlEndPoint = 'http://localhost:8080/api/media/youtube';
 
   constructor(private http: HttpClient, private router: Router) {
   }
-
   getVideo(query: string): Observable<Media> {
-    return this.http.get<Media>(`${this.urlEndPoint}/${query}`).pipe(
+    const text = '?query='.concat(query);
+
+    return this.http.get<Media>(`${this.urlEndPoint}/${text}`).pipe(
       catchError(e => {
         if (e.status === 400) {
           return throwError(e);
@@ -28,4 +30,6 @@ export class DataAPIService {
       })
     );
   }
+
+
 }

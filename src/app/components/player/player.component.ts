@@ -1,5 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 import reframe from 'reframe.js';
+import {Media} from '../../clases/media';
+import {MediaService} from '../../services/media.service';
+import * as SockJS from 'sockjs-client';
+import {Client} from '@stomp/stompjs';
+
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
@@ -7,14 +12,38 @@ import reframe from 'reframe.js';
 })
 export class PlayerComponent implements OnInit {
   public YT: any;
-  public video: string;
+  public video = '';
+  public media: Media;
   public player: any;
   public reframed = false;
   public query: string;
-  constructor() { }
+  private client: Client;
+  public connected = false;
+  public clientId: string;
+  public playerState: string;
+
+  constructor(private mediaService: MediaService) {
+    this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
+  }
+
   ngOnInit(): void {
+    this.client = new Client();
+    this.client.webSocketFactory = () => {
+      return new SockJS('http://localhost:8080/sync-websocket');
+    };
+    const promise = new Promise((resolve, reject) => {
+      this.client.activate();
+      this.client.onConnect = (frame) => {
+        this.connected = true;
+        this.client.subscribe('/room/state', e => {
+          this.changeState(e);
+        });
+      };
+    });
+    promise.then(
+      (val) => console.log(val)
+    );
     this.init();
-    this.video = '1cH2cerUpMQ';
     window['onYouTubeIframeAPIReady'] = (e) => {
       this.YT = window['YT'];
       this.reframed = false;
@@ -33,6 +62,7 @@ export class PlayerComponent implements OnInit {
       });
     };
   }
+
   init(): void {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -41,18 +71,26 @@ export class PlayerComponent implements OnInit {
   }
 
   onPlayerStateChange(event): void {
-    console.log(event);
     switch (event.data) {
       case window['YT'].PlayerState.PLAYING:
         if (this.cleanTime() === 0) {
           console.log('started ' + this.cleanTime());
         } else {
+          const promise = this.playerChangeState('PLAYING');
+          promise.then(
+            () => {
+              this.client.publish({destination: '/app/state', body: 'PLAYING ' + this.cleanTime()});
+            }
+          );
           console.log('playing ' + this.cleanTime());
         }
         break;
       case window['YT'].PlayerState.PAUSED:
         if (this.player.getDuration() - this.player.getCurrentTime() !== 0) {
-          console.log('paused' + ' @ ' + this.cleanTime());
+          const promise = this.playerChangeState('PAUSED');
+          promise.then(
+            () => {this.client.publish({destination: '/app/state', body: 'PAUSED ' + this.cleanTime()})}
+          );
         }
         break;
       case window['YT'].PlayerState.ENDED:
@@ -60,9 +98,17 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
+  playerChangeState(state): Promise<any> {
+    const promise = new Promise((resolve) => {
+      this.playerState = state;
+      resolve();
+    });
+    return promise;
+  }
   cleanTime(): number {
     return Math.round(this.player.getCurrentTime());
   }
+
   onPlayerError(event): void {
     switch (event.data) {
       case 2:
@@ -72,6 +118,34 @@ export class PlayerComponent implements OnInit {
         break;
       case 101 || 150:
         break;
+    }
+  }
+
+  onEnter(query: string): void {
+    console.log(query);
+    this.mediaService.getVideo(query).subscribe(media => {
+        console.log(media);
+        this.video = media.id;
+        this.player.loadVideoById(media.id, 0, 'large');
+      }
+    );
+  }
+  connect(): void {
+    this.client.activate();
+  }
+
+  disconnect(): void {
+    this.client.deactivate();
+  }
+
+  private changeState(e): void {
+    console.log('AQUI ESTOY');
+    console.log(e.body.split(' ')[0], this.playerState);
+    if (e.body.split(' ')[0] === 'PLAYING' && this.playerState === 'PAUSED') {
+      this.player.playVideo();
+    } else if (e.body.split(' ')[0] === 'PAUSED' && this.playerState === 'PLAYING') {
+      console.log('NO me pauso por que soy tonto');
+      this.player.pauseVideo();
     }
   }
 }
