@@ -7,9 +7,7 @@ import {PlayerComponent} from '../player/player.component';
   styleUrls: ['./room.component.css']
 })
 export class RoomComponent implements OnInit {
-
   constructor() { }
-
   ngOnInit(): void {
   }
 
