@@ -23,7 +23,8 @@ export class PlayerComponent implements OnInit {
   public playerState: string;
   public started = false;
   @Input() roomId: string;
-
+  public url = 'https://mediameet-backend.herokuapp.com';
+  // public url = 'https://localhost:8080;
   constructor(private mediaService: MediaService) {
     this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
   }
@@ -31,7 +32,7 @@ export class PlayerComponent implements OnInit {
   ngOnInit(): void {
     this.client = new Client();
     this.client.webSocketFactory = () => {
-      return new SockJS('http://localhost:8080/sync-websocket');
+      return new SockJS(this.url + '/sync-websocket');
     };
     const promise = new Promise((resolve, reject) => {
       this.client.activate();
