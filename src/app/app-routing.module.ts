@@ -7,9 +7,10 @@ import {RoomComponent} from './components/room/room.component';
 import {Page404Component} from './components/page404/page404.component';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'room/:roomId', component: RoomComponent}, // TODO, only users auth
-  {path: 'user/login', component: LoginComponent},
+
+  {path: '', component: LoginComponent},
+  {path: 'preroom', component: HomeComponent},
+  {path: 'room', component: RoomComponent}, // TODO, only users auth
   {path: 'user/register', component: RegisterComponent},
   {path: '**', component: Page404Component}
 ];
