@@ -5,24 +5,20 @@
         <div class="card_login">
           <div class="card">
             <div class="card-body text-center">
-              <!--              (ngSubmit)="onLogin(formLogin)"-->
-              <form #formLogin="ngForm">
-                <!--                *ngIf="!isError"-->
-                <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-                <!--                -->
+
+              <form #formLogin="ngForm" (ngSubmit)="onLogin()">
+                <h1 class="h3 mb-3 font-weight-normal" *ngIf="!isError">Login</h1>
                 <div class="alert alert-danger" role="alert" *ngIf="isError">
+                  {{isError}}
                   Something is wrong!
                 </div>
                 <div class="form-group">
-                  <!--                  [(ngModel)]="user.email"-->
-                  <input type="email" id="email" name="email" class="form-control" placeholder="Email"
-                         required>
+                  <input [(ngModel)]="email" type="email" id="email" name="email" class="form-control"
+                         placeholder="Email" required>
                 </div>
                 <div class="form-group">
-                  <!--                  [(ngModel)]="user.password"-->
-                  <input type="password" id="password" name="password" class="form-control" placeholder="Password"
-
-                         required>
+                  <input [(ngModel)]="passwd" type="password" id="password" name="password" class="form-control"
+                         placeholder="Password" required>
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
                 <div class="form-group">

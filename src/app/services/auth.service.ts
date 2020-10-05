@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {auth} from 'firebase';
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
@@ -27,12 +28,12 @@ export class AuthService {
   }
 
 
-  loginFacebookUser() {
-    this.oAuth.signInWithPopup(new auth.FacebookAuthProvider());
+  loginFacebookUser(): Promise<firebase.auth.UserCredential> {
+    return this.oAuth.signInWithPopup(new auth.FacebookAuthProvider());
   }
 
-  loginGoogleUser(): void {
-    this.oAuth.signInWithPopup(new auth.GoogleAuthProvider());
+  loginGoogleUser(): Promise<firebase.auth.UserCredential> {
+    return this.oAuth.signInWithPopup(new auth.GoogleAuthProvider());
   }
 
   logoutUser(): void {
