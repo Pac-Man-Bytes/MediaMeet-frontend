@@ -12,6 +12,11 @@ import {RegisterComponent} from './components/user/register/register.component';
 import {Page404Component} from './components/page404/page404.component';
 import {ChatComponent} from './components/chat/chat.component';
 import {FormsModule} from '@angular/forms';
+import {environment} from '../environments/environment';
+import {AngularFireModule} from '@angular/fire';
+import {AngularFireDatabaseModule} from '@angular/fire/database';
+import {AngularFireAuth} from '@angular/fire/auth';
+
 // Services
 import {MediaService} from './services/media.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
@@ -32,9 +37,11 @@ import {HttpClient, HttpClientModule} from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireDatabaseModule
   ],
-  providers: [MediaService, HttpClient],
+  providers: [MediaService, HttpClient, AngularFireAuth],
   bootstrap: [AppComponent]
 })
 export class AppModule {
