@@ -1,5 +1,32 @@
-<form style="margin-top:280px">
-  <input #id  placeholder="Ingresa Id"/>
-  <button class="btn btn-dark" (click)="redirectToRoom(id.value)">Go to room</button>
-</form>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header ">
+          <h2 class="text-center">Crear Sala</h2>
+        </div>
+        <form #roomForm (ngSubmit)="createRoom()">
+          <div class="card-body flex-container">
+            <p style="padding: 2rem">Crea una sala y comparte multimedia con tus amigos.</p>
 
+            <div class="form-group">
+              <label for="roomName">Nombre</label>
+              <input id="roomName" type="text" class="form-control" placeholder="Nombre de la Sala"
+                     [(ngModel)]="room.name" name="name" #name="ngModel">
+            </div>
+          </div>
+          <div class="card-footer flex-container">
+            <button class="btn btn-primary" type="submit">Crear</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-header justify-content-center">
+          <h2>Unirse a una Sala</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

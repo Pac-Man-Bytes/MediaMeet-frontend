@@ -10,7 +10,7 @@ const routes: Routes = [
 
   {path: '', component: LoginComponent},
   {path: 'preroom', component: HomeComponent},
-  {path: 'room', component: RoomComponent}, // TODO, only users auth
+  {path: 'room/:roomId', component: RoomComponent}, // TODO, only users auth
   {path: 'user/register', component: RegisterComponent},
   {path: '**', component: Page404Component}
 ];
