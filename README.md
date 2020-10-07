@@ -1,5 +1,9 @@
 # MediaMeet-backend
 
+## Logo
+
+![](https://cdn.discordapp.com/attachments/748398289514397717/763456425099132978/Screen_Shot_2020-10-07_at_12.41.11_PM.png)
+
 ## Architecture
 
 + Component Diagram
@@ -43,9 +47,17 @@ For the continous integration, the project has CI with Circle Ci
 
  [![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://app.circleci.com/pipelines/github/Pac-Man-Bytes/MediaMeet-frontend)
 
-For the continous deployment, the project has CD with Heroku
 
-[![Actions Status][gh-actions-badge]][gh-actions]
+For the continous deployment, the project has CD with Firebase and Github Actions
+
+![Build_and_Deploy](https://github.com/Pac-Man-Bytes/MediaMeet-frontend/workflows/Build_and_Deploy/badge.svg)
+
+
+For the code quality
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7c11134a1b5e478090c93293fc1e1296)](https://www.codacy.com/gh/Pac-Man-Bytes/MediaMeet-frontend/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Pac-Man-Bytes/MediaMeet-frontend&amp;utm_campaign=Badge_Grade)
+
+
 
 ## Versioning
 
