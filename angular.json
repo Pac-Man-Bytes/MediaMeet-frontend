@@ -13,6 +13,25 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "firebase",
+              "@firebase",
+              "devextreme-angular",
+              "devextreme",
+              "@angular/common/locales/fr",
+              "lodash/dropRight",
+              "@firebase/app",
+              "@firebase/auth",
+              "@firebase/database",
+              "@firebase/firestore",
+              "@firebase/functions",
+              "@firebase/performance",
+              "@firebase/remote-config",
+              "@angular/fire",
+              "devexpress-richedit",
+              "x-data-spreadsheet"
+            ],
             "outputPath": "dist/MediaMeet-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -25,9 +44,15 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/font-awesome/css/font-awesome.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+              "./node_modules/popper.js/dist/umd/popper.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -89,7 +114,6 @@
               "src/assets"
             ],
             "styles": [
-              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -125,6 +149,6 @@
   },
   "defaultProject": "MediaMeet-frontend",
   "cli": {
-    "analytics": "a24cf975-24c6-4b9c-adda-8d7d6a6c318b"
+    "analytics": "97ce4c47-4229-4e72-9e48-a932229dec77"
   }
 }
