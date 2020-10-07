@@ -5,14 +5,13 @@ import {Observable, throwError} from 'rxjs';
 import {Media} from '../clases/media';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
-import {Query} from '../clases/query';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MediaService {
-  public urlEndPoint = 'https://mediameet-backend.herokuapp.com/api/media/youtube';
-  // public url = 'https://localhost:8080/api/media/youtube;
+  // public urlEndPoint = 'https://mediameet-backend.herokuapp.com/api/media/youtube';
+  public urlEndPoint = 'http://localhost:8080/api/media/youtube';
   constructor(private http: HttpClient, private router: Router) {}
   getVideo(query: string): Observable<Media> {
     const text = '?query='.concat(query);
