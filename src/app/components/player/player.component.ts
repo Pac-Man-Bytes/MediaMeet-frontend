@@ -23,8 +23,8 @@ export class PlayerComponent implements OnInit {
   public playerState: string;
   public started = false;
   @Input() roomId: string;
-  // public url = 'https://mediameet-backend.herokuapp.com';
-  public url = 'http://localhost:8080';
+  public url = 'https://mediameet-backend.herokuapp.com';
+  // public url = 'http://localhost:8080';
 
   constructor(private mediaService: MediaService) {
     this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
