@@ -23,12 +23,15 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(): void {
-    this.authService.loginEmailUser(this.email, this.passwd)
-      .then((res) => {
-        console.log('resUser', res);
-        this.router.navigate(['preroom']);
-        console.log(firebase.auth().currentUser.uid);
-      }).catch(err => console.log('Error', err));
+    this.afAuth.setPersistence('local').then(_ => {
+      this.authService.loginEmailUser(this.email, this.passwd)
+        .then((res) => {
+          console.log('resUser', res);
+          this.router.navigate(['preroom']);
+          console.log(firebase.auth().currentUser.uid);
+        }).catch(err => console.log('Error', err));
+    });
+
   }
 
   onLoginGoogle(): void {

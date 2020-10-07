@@ -5,18 +5,25 @@
         <div class="card-header ">
           <h2 class="text-center">Crear Sala</h2>
         </div>
-        <form #roomForm (ngSubmit)="createRoom()">
+        <form #roomForm = "ngForm">
           <div class="card-body flex-container">
             <p style="padding: 2rem">Crea una sala y comparte multimedia con tus amigos.</p>
-
             <div class="form-group">
               <label for="roomName">Nombre</label>
               <input id="roomName" type="text" class="form-control" placeholder="Nombre de la Sala"
-                     [(ngModel)]="room.name" name="name" #name="ngModel">
+                     [(ngModel)]="cRoom.name" name="roomName" #roomName="ngModel">
+              <div class="alert alert-danger" *ngIf="roomName.invalid && (roomName.dirty || roomName.touched)">
+                <div *ngIf="roomName.errors.required">
+                  Nombre requerido.
+                </div>
+                <div *ngIf="roomName.errors.minlength">
+                  El nombre debe tener almenos 4 carácteres.
+                </div>
+              </div>
             </div>
           </div>
           <div class="card-footer flex-container">
-            <button class="btn btn-primary" type="submit">Crear</button>
+            <button class="btn btn-primary" role="button" (click)="createRoom()">Crear</button>
           </div>
         </form>
       </div>
@@ -24,8 +31,26 @@
     <div class="col">
       <div class="card">
         <div class="card-header justify-content-center">
-          <h2>Unirse a una Sala</h2>
+          <h2>Unirse a Sala</h2>
         </div>
+        <form #getForm="ngForm">
+          <div class="card-body flex-container">
+            <p style="padding: 2rem">Unete a una sala para compartir con amigos</p>
+            <div class="form-group">
+              <label for="roomId">Id</label>
+              <input id="roomId" type="text" class="form-control" placeholder="Id de sala"
+                     [(ngModel)]="room.id" name="id" #roomId="ngModel" required>
+              <div class="alert alert-danger" *ngIf="roomId.invalid && (roomId.dirty || roomId.touched)">
+                <div *ngIf="roomId.errors.required">
+                  Id requerido.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer flex-container">
+            <button class="btn btn-primary" role="button" (click)="getRoom()">Unirse</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
