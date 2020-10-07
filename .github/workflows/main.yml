@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-    - uses: actions/setup-node@master
+    - uses: actions/checkout@develop
+    - uses: actions/setup-node@develop
       with:
         node-version: '12.x'
     - run: npm install
     - run: npm run build --prod
-    - uses: w9jds/firebase-action@master
+    - uses: w9jds/firebase-action@develop
       with:
         args: deploy --only hosting
       env:
