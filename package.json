@@ -5,10 +5,12 @@
     "ng": "ng",
     "start": "ng serve",
     "debug": "ng serve --ssl true -o",
-    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build": "ng build --output-path=dist",
+    "build-ghpages": "ng build --configuration=production --output-path=dist --base-href=https://[username].github.io/[repo]/"
+
   },
   "private": true,
   "dependencies": {

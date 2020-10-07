@@ -1,17 +1,27 @@
+
 version: 2
 jobs:
   build:
-    working_directory: ~/my-project
+    working_directory: ~/myapp
     docker:
-      - image: circleci/node:8-browsers
+      - image: circleci/node:12-browsers
     steps:
-      - checkout:
-          - path: ~/my-project
+      - checkout
       - restore_cache:
-          key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
-      - run: npm install
+          key: myapp-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      - run: npm ci
       - save_cache:
-          key: AngularCircleCI-{{ .Branch }}-{{ checksum "package.json" }}
+          key: myapp-{{ .Branch }}-{{ checksum "package-lock.json" }}
           paths:
-            - "node_modules"
-      - run: npm run test -- --progress=false --watch=false --browser=ChromeHeadlessCI
+            - ~/.npm
+            - ~/.cache
+      - run: |
+          if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            npm run build-ghpages
+          else
+            npm run build
+          fi
+      - persist_to_workspace:
+          root: ~/myapp
+          paths:
+            - dist/*
