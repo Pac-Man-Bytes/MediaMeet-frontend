@@ -30,11 +30,15 @@ export class AuthService {
 
 
   loginFacebookUser(): Promise<firebase.auth.UserCredential> {
-    return this.oAuth.signInWithPopup(new auth.FacebookAuthProvider());
+    return this.oAuth.setPersistence('session').then(_ => {
+      return this.oAuth.signInWithPopup(new auth.FacebookAuthProvider());
+    });
   }
 
   loginGoogleUser(): Promise<firebase.auth.UserCredential> {
-    return this.oAuth.signInWithPopup(new auth.GoogleAuthProvider());
+    return this.oAuth.setPersistence('session').then(_ => {
+      return this.oAuth.signInWithPopup(new auth.GoogleAuthProvider());
+    });
   }
 
   logoutUser(): void {
