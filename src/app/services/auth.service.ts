@@ -14,12 +14,6 @@ export class AuthService {
   constructor(private oAuth: AngularFireAuth) {
   }
 
-  registerUser(): void {
-  }
-
-  loginUser(): void {
-  }
-
   loginEmailUser(email: string, passwd: string): Promise<unknown> {
     return new Promise((resolve, reject) => {
       this.oAuth.signInWithEmailAndPassword(email, passwd)
