@@ -3,7 +3,7 @@ name: Build_and_Deploy
 on:
   push:
     branches:
-    - develop
+    - master
 
 jobs:
   firebase-deploy:

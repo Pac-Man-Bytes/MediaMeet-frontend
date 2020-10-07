@@ -5,11 +5,13 @@ import {LoginComponent} from './components/user/login/login.component';
 import {RegisterComponent} from './components/user/register/register.component';
 import {RoomComponent} from './components/room/room.component';
 import {Page404Component} from './components/page404/page404.component';
+import {RestrictRoutesGuard} from './components/restrict-routes.guard';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
-  {path: 'room/:roomId', component: RoomComponent}, // TODO, only users auth
-  {path: 'user/login', component: LoginComponent},
+
+  {path: '', component: LoginComponent},
+  {path: 'preroom', component: HomeComponent, canActivate: [RestrictRoutesGuard]},
+  {path: 'room/:roomId', component: RoomComponent, canActivate: [RestrictRoutesGuard]}, // TODO, only users auth
   {path: 'user/register', component: RegisterComponent},
   {path: '**', component: Page404Component}
 ];

@@ -24,7 +24,8 @@ export class PlayerComponent implements OnInit {
   public started = false;
   @Input() roomId: string;
   public url = 'https://mediameet-backend.herokuapp.com';
-  // public url = 'https://localhost:8080;
+  // public url = 'http://localhost:8080';
+
   constructor(private mediaService: MediaService) {
     this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
   }
@@ -79,22 +80,22 @@ export class PlayerComponent implements OnInit {
   onPlayerStateChange(event): void {
     switch (event.data) {
       case window['YT'].PlayerState.PLAYING:
-          const promise1 = this.setStarted();
-          promise1.then(
-            () => {
-              this.client.publish({
-                destination: '/app/videoStatus/' +
-                  this.roomId, body: JSON.stringify(this.currentTrack)
-              });
-            }
-          );
-          const promise = this.playerChangeState('PLAYING');
-          promise.then(
-            () => {
-              this.client.publish({destination: '/app/state/' + this.roomId, body: 'PLAYING ' + this.cleanTime()});
-            }
-          );
-          break;
+        const promise1 = this.setStarted();
+        promise1.then(
+          () => {
+            this.client.publish({
+              destination: '/app/videoStatus/' +
+                this.roomId, body: JSON.stringify(this.currentTrack)
+            });
+          }
+        );
+        const promise = this.playerChangeState('PLAYING');
+        promise.then(
+          () => {
+            this.client.publish({destination: '/app/state/' + this.roomId, body: 'PLAYING ' + this.cleanTime()});
+          }
+        );
+        break;
       case window['YT'].PlayerState.PAUSED:
         if (this.player.getDuration() - this.player.getCurrentTime() !== 0) {
           const promise = this.playerChangeState('PAUSED');
@@ -111,7 +112,7 @@ export class PlayerComponent implements OnInit {
     }
   }
 
-  setStarted(): Promise<any>{
+  setStarted(): Promise<any> {
     const promise = new Promise((resolve) => {
       this.started = true;
       this.currentTrack.time = this.cleanTime();
@@ -119,6 +120,7 @@ export class PlayerComponent implements OnInit {
     });
     return promise;
   }
+
   playerChangeState(state): Promise<any> {
     const promise = new Promise((resolve) => {
       this.playerState = state;
