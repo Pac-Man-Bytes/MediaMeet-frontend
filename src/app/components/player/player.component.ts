@@ -24,8 +24,9 @@ export class PlayerComponent implements OnInit {
   public playerState: string;
   public started = false;
   @Input() roomId: string;
-  public url = 'https://mediameet-backend.herokuapp.com';
-  // public url = 'http://localhost:8080';
+  // public url = 'https://mediameet-backend.herokuapp.com';
+
+  public url = 'http://localhost:8080';
 
   constructor(private mediaService: MediaService) {
     this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
@@ -47,7 +48,7 @@ export class PlayerComponent implements OnInit {
         this.client.subscribe('/room/videoStatus/' + this.roomId, e => {
           this.sinchronizeVideo(e);
         });
-        this.client.subscribe('/room/queue/' + this.roomId, e =>{
+        this.client.subscribe('/room/queue/' + this.roomId, e => {
           this.sinchronizeQueue(e);
         });
       };
@@ -58,6 +59,7 @@ export class PlayerComponent implements OnInit {
     this.init();
     this.initPlayer();
   }
+
   init(): void {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
@@ -65,7 +67,8 @@ export class PlayerComponent implements OnInit {
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
   }
-  initPlayer(): void{
+
+  initPlayer(): void {
     window['onYouTubeIframeAPIReady'] = (e) => {
       this.YT = window['YT'];
       this.reframed = false;
@@ -84,6 +87,7 @@ export class PlayerComponent implements OnInit {
       });
     };
   }
+
   onPlayerStateChange(event): void {
     switch (event.data) {
       case window['YT'].PlayerState.PLAYING:
@@ -118,13 +122,15 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
-  timeOut(): Promise<any>{
+
+  timeOut(): Promise<any> {
     this.player.pauseVideo();
-    const promise = new Promise( (resolve) => {
-      setTimeout( () => resolve(), 20);
+    const promise = new Promise((resolve) => {
+      setTimeout(() => resolve(), 50);
     });
     return promise;
   }
+
   setStarted(): Promise<any> {
     const promise = new Promise((resolve) => {
       this.started = true;
@@ -133,6 +139,7 @@ export class PlayerComponent implements OnInit {
     });
     return promise;
   }
+
   playerChangeState(state): Promise<any> {
     const promise = new Promise((resolve) => {
       this.playerState = state;
@@ -140,9 +147,11 @@ export class PlayerComponent implements OnInit {
     });
     return promise;
   }
+
   cleanTime(): number {
     return Math.round(this.player.getCurrentTime());
   }
+
   onPlayerError(event): void {
     switch (event.data) {
       case 2:
@@ -154,29 +163,33 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
+
   onEnter(query: string): void {
-    this.mediaService.getVideo(query).subscribe(media => {
-        this.currentTrack = media;
-        this.video = media.id;
-        this.player.loadVideoById(media.id, 0, 'large');
-      }
-    );
     const timeOut = this.timeOut();
     timeOut.then(
       () => {
+        this.mediaService.getVideo(query).subscribe(media => {
+            this.currentTrack = media;
+            this.video = media.id;
+          }
+        );
         this.client.publish({destination: '/app/queue/' + this.roomId, body: JSON.stringify(this.currentTrack)});
       }
     );
   }
+
   connect(): void {
     this.client.activate();
   }
+
   disconnect(): void {
     this.client.deactivate();
   }
+
   roomIdM(): void {
     console.log(this.roomId);
   }
+
   private sinchronizeVideo(e): void {
     const media = JSON.parse(e.body) as Media;
     if (!this.started) {
@@ -185,11 +198,13 @@ export class PlayerComponent implements OnInit {
       this.player.loadVideoById(media.id, media.time, 'large');
     }
   }
+
   sinchronizeQueue(e): void {
     const media = JSON.parse(e.body) as Media;
     this.video = media.id;
     this.player.loadVideoById(media.id, media.time, 'large');
   }
+
   private changeState(e): void {
     console.log(e.body.split(' ')[0], this.playerState);
     if (e.body.split(' ')[0] === 'PLAYING' && this.playerState === 'PAUSED') {
