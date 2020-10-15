@@ -1,44 +1,105 @@
-<section id="login" class="mb-5 mt-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-        <div class="card_login">
-          <div class="card">
-            <div class="card-body text-center">
+<!--<section id="login" class="mb-5 mt-5">-->
+<!--  <div class="container">-->
+<!--    <div class="row">-->
+<!--      <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">-->
+<!--        <div class="card_login">-->
+<!--          <div class="card">-->
+<!--            <div class="card-body text-center">-->
 
-              <form #formLogin="ngForm" (ngSubmit)="onLogin()">
-                <h1 class="h3 mb-3 font-weight-normal" *ngIf="!isError">Login</h1>
-                <div class="alert alert-danger" role="alert" *ngIf="isError">
-                  {{isError}}
-                  Something is wrong!
-                </div>
-                <div class="form-group">
-                  <input [(ngModel)]="email" type="email" id="email" name="email" class="form-control"
-                         placeholder="Email" required>
-                </div>
-                <div class="form-group">
-                  <input [(ngModel)]="passwd" type="password" id="password" name="password" class="form-control"
-                         placeholder="Password" required>
-                </div>
-                <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
-                <div class="form-group">
-                  <a routerLink="/user/register" class="form-control login-user">Are you new ?</a>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-block btn-social btn-facebook" (click)="onLoginFacebook()">
-                    <span class="fa fa-facebook"></span>
-                    Facebook
-                  </button>
-                  <button class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()">
-                    <span class="fa fa-google"></span>
-                    Google
-                  </button>
-                </div>
-              </form>
-            </div>
+<!--              <form #formLogin="ngForm" (ngSubmit)="onLogin()">-->
+<!--                <h1 class="h3 mb-3 font-weight-normal" *ngIf="!isError">Login</h1>-->
+<!--                <div class="alert alert-danger" role="alert" *ngIf="isError">-->
+<!--                  {{errorMssg}}-->
+<!--                  Something is wrong!-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                  <input [(ngModel)]="email" type="email" id="email" name="email" class="form-control"-->
+<!--                         placeholder="Email" required>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                  <input [(ngModel)]="passwd" type="password" id="password" name="password" class="form-control"-->
+<!--                         placeholder="Password" required>-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>-->
+<!--                <div class="form-group">-->
+<!--                  <a routerLink="/user/register" class="form-control login-user">Are you new ?</a>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                  <button class="btn btn-block btn-social btn-facebook" (click)="onLoginFacebook()">-->
+<!--                    <span class="fa fa-facebook"></span>-->
+<!--                    Facebook-->
+<!--                  </button>-->
+<!--                  <button class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()">-->
+<!--                    <span class="fa fa-google"></span>-->
+<!--                    Google-->
+<!--                  </button>-->
+<!--                </div>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+<div class="container mt--8 pb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+      <div class="card bg-secondary shadow border-0">
+        <div class="card-header bg-transparent pb-5">
+          <div class="text-muted text-center mt-2 mb-3"><small>Sign in with</small></div>
+          <div class="btn-wrapper text-center">
+            <a href="javascript:void(0)" class="btn btn-neutral btn-icon">
+              <span class="btn-inner--icon"><img src="../assets/img/icons/common/github.svg"></span>
+              <span class="btn-inner--text">Github</span>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-neutral btn-icon">
+              <span class="btn-inner--icon"><img src="../assets/img/icons/common/google.svg"></span>
+              <span class="btn-inner--text">Google</span>
+            </a>
           </div>
+        </div>
+        <div class="card-body px-lg-5 py-lg-5">
+          <div class="text-center text-muted mb-4">
+            <small>Or sign in with credentials</small>
+          </div>
+          <form role="form">
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                </div>
+                <input class="form-control" placeholder="Email" type="email">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                </div>
+                <input class="form-control" placeholder="Password" type="password">
+              </div>
+            </div>
+            <div class="custom-control custom-control-alternative custom-checkbox">
+              <input class="custom-control-input" id=" customCheckLogin" type="checkbox">
+              <label class="custom-control-label" for=" customCheckLogin">
+                <span class="text-muted">Remember me</span>
+              </label>
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn btn-primary my-4">Sign in</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-6">
+          <a href="javascript:void(0)" class="text-light"><small>Forgot password?</small></a>
+        </div>
+        <div class="col-6 text-right">
+          <a href="javascript:void(0)" class="text-light"><small>Create new account</small></a>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
