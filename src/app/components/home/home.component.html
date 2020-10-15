@@ -10,7 +10,7 @@
             <p style="padding: 2rem">Crea una sala y comparte multimedia con tus amigos.</p>
             <div class="form-group">
               <label for="roomName">Nombre</label>
-              <input id="roomName" type="text" class="form-control" placeholder="Nombre de la Sala"
+              <input id="roomName" type="text" class=f"form-control" placeholder="Nombre de la Sala"
                      [(ngModel)]="cRoom.name" name="roomName" #roomName="ngModel">
               <div class="alert alert-danger" *ngIf="roomName.invalid && (roomName.dirty || roomName.touched)">
                 <div *ngIf="roomName.errors.required">
@@ -48,7 +48,7 @@
             </div>
           </div>
           <div class="card-footer flex-container">
-            <button class="btn btn-primary" role="button" (click)="getRoom()">Unirse</button>
+            <button class="btn btn-primary" role="button" type="submit" (click)="getRoom()">Unirse</button>
           </div>
         </form>
       </div>
