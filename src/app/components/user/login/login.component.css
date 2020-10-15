@@ -15,8 +15,9 @@
 .btn-facebook {
   background: #3d5998;
 }
-
 .btn-google {
   background: #dd4b39;
-
+}
+.alignmargin{
+  margin-top: 8rem;
 }
