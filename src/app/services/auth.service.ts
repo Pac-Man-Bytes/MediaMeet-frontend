@@ -39,6 +39,15 @@ export class AuthService {
     this.oAuth.signOut();
   }
 
+  registerUser(email, passwd): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.oAuth.createUserWithEmailAndPassword(email, passwd)
+        .then(userData => resolve(userData),
+          error => reject(error));
+    });
+
+  }
+
 // check if user is logged
   isAuth(): Observable<firebase.User> {
     return this.oAuth.authState.pipe(map(auth => auth));

@@ -25,7 +25,6 @@ export class PlayerComponent implements OnInit {
   public started = false;
   @Input() roomId: string;
   // public url = 'https://mediameet-backend.herokuapp.com';
-
   public url = 'http://localhost:8080';
 
   constructor(private mediaService: MediaService) {
