@@ -5,7 +5,6 @@ import {MediaService} from '../../services/media.service';
 import * as SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import {timeout} from 'rxjs/operators';
-
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
@@ -14,7 +13,7 @@ import {timeout} from 'rxjs/operators';
 export class PlayerComponent implements OnInit {
   public YT: any;
   public video = '';
-  public currentTrack: Media;
+  public currentTrack = new Media();
   public player: any;
   public reframed = false;
   public query: string;
@@ -23,15 +22,13 @@ export class PlayerComponent implements OnInit {
   public clientId: string;
   public playerState: string;
   public started = false;
+  public videos = [];
   @Input() roomId: string;
   // public url = 'https://mediameet-backend.herokuapp.com';
-
   public url = 'http://localhost:8080';
-
   constructor(private mediaService: MediaService) {
     this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
   }
-
   ngOnInit(): void {
     this.client = new Client();
     this.client.webSocketFactory = () => {
@@ -41,33 +38,39 @@ export class PlayerComponent implements OnInit {
       this.client.activate();
       this.client.onConnect = (frame) => {
         this.connected = true;
-
         this.client.subscribe('/room/state/' + this.roomId, e => {
           this.changeState(e);
         });
-        this.client.subscribe('/room/videoStatus/' + this.roomId, e => {
-          this.sinchronizeVideo(e);
+        this.client.subscribe('/room/next/' + this.roomId, e => {
+          this.putNextSong(e);
         });
         this.client.subscribe('/room/queue/' + this.roomId, e => {
-          this.sinchronizeQueue(e);
+          this.synchronizeQueue(e);
         });
+        this.client.subscribe('/room/queue/' + this.roomId + '/playlists', e => {
+          this.synchronizeQueue(e);
+        });
+        this.client.subscribe('/room/queue/' + this.roomId + '/playlist', e => {
+          this.synchronizeQueue(e);
+        });
+        this.client.publish({destination: '/app/queue/' + this.roomId + '/playlist', body: null});
       };
     });
     promise.then(
       (val) => console.log(val)
     );
+    this.client.onDisconnect = (frame) => {
+      this.client.deactivate();
+    };
     this.init();
     this.initPlayer();
   }
-
   init(): void {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
   }
-
   initPlayer(): void {
     window['onYouTubeIframeAPIReady'] = (e) => {
       this.YT = window['YT'];
@@ -87,7 +90,6 @@ export class PlayerComponent implements OnInit {
       });
     };
   }
-
   onPlayerStateChange(event): void {
     switch (event.data) {
       case window['YT'].PlayerState.PLAYING:
@@ -118,28 +120,17 @@ export class PlayerComponent implements OnInit {
         }
         break;
       case window['YT'].PlayerState.ENDED:
-        console.log('ended ');
+        this.next();
         break;
     }
   }
-
-  timeOut(): Promise<any> {
-    this.player.pauseVideo();
-    const promise = new Promise((resolve) => {
-      setTimeout(() => resolve(), 50);
-    });
-    return promise;
-  }
-
   setStarted(): Promise<any> {
     const promise = new Promise((resolve) => {
       this.started = true;
-      this.currentTrack.time = this.cleanTime();
       resolve();
     });
     return promise;
   }
-
   playerChangeState(state): Promise<any> {
     const promise = new Promise((resolve) => {
       this.playerState = state;
@@ -147,11 +138,9 @@ export class PlayerComponent implements OnInit {
     });
     return promise;
   }
-
   cleanTime(): number {
     return Math.round(this.player.getCurrentTime());
   }
-
   onPlayerError(event): void {
     switch (event.data) {
       case 2:
@@ -163,48 +152,68 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
-
-  onEnter(query: string): void {
+  onEnter(query: string): Promise<any> {
+    const promise = new Promise<any>(resolve => {
+      this.mediaService.getVideo(query).subscribe(media => {
+        if (!this.started || this.videos.length === 0){
+          console.log('si llego');
+          this.sinchronizeVideo(media);
+          this.setStarted();
+        }else {
+          console.log('No llego nunca xd');
+          this.client.publish({destination: '/app/queue/' + this.roomId, body: JSON.stringify(media)});
+        }
+      });
+      resolve();
+    });
+    return promise;
+  }
+  timeOut(): Promise<any> {
+    if (this.currentTrack){
+      this.player.pauseVideo();
+    }
+    const promise = new Promise((resolve) => {
+      setTimeout(() => {
+        this.currentTrack = this.videos.pop();
+        resolve();
+      }, 50);
+    });
+    return promise;
+  }
+  next(): void {
     const timeOut = this.timeOut();
     timeOut.then(
       () => {
-        this.mediaService.getVideo(query).subscribe(media => {
-            this.currentTrack = media;
-            this.video = media.id;
-          }
-        );
-        this.client.publish({destination: '/app/queue/' + this.roomId, body: JSON.stringify(this.currentTrack)});
+        this.client.publish({destination: '/app/next/' + this.roomId, body: JSON.stringify(this.currentTrack)});
+        this.client.publish({destination: '/app/queue/' + this.roomId + '/playlists', body: JSON.stringify(this.videos)});
       }
     );
   }
-
   connect(): void {
     this.client.activate();
   }
-
   disconnect(): void {
     this.client.deactivate();
   }
-
   roomIdM(): void {
     console.log(this.roomId);
   }
-
-  private sinchronizeVideo(e): void {
-    const media = JSON.parse(e.body) as Media;
+  private sinchronizeVideo(track: Media): void {
     if (!this.started) {
-      console.log(media.id, media.time, 'large');
-      this.video = media.id;
-      this.player.loadVideoById(media.id, media.time, 'large');
+      this.currentTrack = track;
+      this.video = track.id;
+      this.player.loadVideoById(track.id, track.time, 'large');
     }
   }
-
-  sinchronizeQueue(e): void {
+  private putNextSong(e): void {
     const media = JSON.parse(e.body) as Media;
     this.video = media.id;
     this.player.loadVideoById(media.id, media.time, 'large');
   }
-
+  private synchronizeQueue(e): void {
+    const queue = JSON.parse(e.body) as Media[];
+    this.videos = queue.reverse();
+  }
   private changeState(e): void {
     console.log(e.body.split(' ')[0], this.playerState);
     if (e.body.split(' ')[0] === 'PLAYING' && this.playerState === 'PAUSED') {
