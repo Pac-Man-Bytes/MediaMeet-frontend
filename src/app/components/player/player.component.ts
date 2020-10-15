@@ -5,7 +5,6 @@ import {MediaService} from '../../services/media.service';
 import * as SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import {timeout} from 'rxjs/operators';
-
 @Component({
   selector: 'app-player',
   templateUrl: './player.component.html',
@@ -27,11 +26,9 @@ export class PlayerComponent implements OnInit {
   @Input() roomId: string;
   // public url = 'https://mediameet-backend.herokuapp.com';
   public url = 'http://localhost:8080';
-
   constructor(private mediaService: MediaService) {
     this.clientId = 'id-' + new Date().getTime() + '-' + Math.random().toString(36).substr(2);
   }
-
   ngOnInit(): void {
     this.client = new Client();
     this.client.webSocketFactory = () => {
@@ -59,8 +56,14 @@ export class PlayerComponent implements OnInit {
         this.client.subscribe('/room/videoStatus/' + this.roomId, e => {
           this.sinchronizeVideo(e);
         });
+        this.client.subscribe('/room/currentTime' + this.roomId, e => {
+          this.fetchVideo(e);
+        });
+        this.client.subscribe('/room/fetch/' + this.roomId, e => {
+          this.fetch(e);
+        });
         this.client.publish({destination: '/app/queue/' + this.roomId + '/playlist', body: null});
-        this.client.publish({destination: '/app/current/' + this.roomId, body: null});
+        this.client.publish({destination: '/app/fetch/' + this.roomId, body: null});
       };
     });
     promise.then(
@@ -72,14 +75,12 @@ export class PlayerComponent implements OnInit {
     this.init();
     this.initPlayer();
   }
-
   init(): void {
     const tag = document.createElement('script');
     tag.src = 'https://www.youtube.com/iframe_api';
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   }
-
   initPlayer(): void {
     window['onYouTubeIframeAPIReady'] = (e) => {
       this.YT = window['YT'];
@@ -99,7 +100,6 @@ export class PlayerComponent implements OnInit {
       });
     };
   }
-
   onPlayerStateChange(event): void {
     switch (event.data) {
       case window['YT'].PlayerState.PLAYING:
@@ -134,7 +134,6 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
-
   setStarted(): Promise<any> {
     const promise = new Promise((resolve) => {
       this.started = true;
@@ -150,11 +149,9 @@ export class PlayerComponent implements OnInit {
     });
     return promise;
   }
-
   cleanTime(): number {
     return Math.round(this.player.getCurrentTime());
   }
-
   onPlayerError(event): void {
     switch (event.data) {
       case 2:
@@ -166,7 +163,6 @@ export class PlayerComponent implements OnInit {
         break;
     }
   }
-
   onEnter(query: string): Promise<any> {
     const promise = new Promise<any>(resolve => {
       this.mediaService.getVideo(query).subscribe(media => {
@@ -180,7 +176,6 @@ export class PlayerComponent implements OnInit {
             this.next();
           }
         } else {
-          console.log('No llego nunca xd');
           this.client.publish({destination: '/app/queue/' + this.roomId, body: JSON.stringify(media)});
         }
       });
@@ -188,7 +183,6 @@ export class PlayerComponent implements OnInit {
     });
     return promise;
   }
-
   timeOut(): Promise<any> {
     if (this.currentTrack) {
       this.player.pauseVideo();
@@ -201,7 +195,6 @@ export class PlayerComponent implements OnInit {
     });
     return promise;
   }
-
   next(): void {
     const timeOut = this.timeOut();
     timeOut.then(
@@ -211,19 +204,15 @@ export class PlayerComponent implements OnInit {
       }
     );
   }
-
   connect(): void {
     this.client.activate();
   }
-
   disconnect(): void {
     this.client.deactivate();
   }
-
   roomIdM(): void {
     console.log(this.roomId);
   }
-
   private sinchronizeVideo(e): void {
     const track = JSON.parse(e.body) as Media;
     if (!this.started) {
@@ -232,25 +221,32 @@ export class PlayerComponent implements OnInit {
       this.player.loadVideoById(track.id, track.time, 'large');
     }
   }
-
   private putNextSong(e): void {
     const media = JSON.parse(e.body) as Media;
     this.video = media.id;
     this.player.loadVideoById(media.id, media.time, 'large');
   }
-
   private synchronizeQueue(e): void {
     const queue = JSON.parse(e.body) as Media[];
     this.videos = queue.reverse();
   }
-
+  private fetch(e): void{
+    if (this.started){
+      this.currentTrack.time = this.cleanTime();
+      this.client.publish({destination: '/app/currentTime/' + this.roomId, body: 'Time' + this.cleanTime()});
+    }
+  }
   private changeState(e): void {
     console.log(e.body.split(' ')[0], this.playerState);
     if (e.body.split(' ')[0] === 'PLAYING' && this.playerState === 'PAUSED') {
       this.player.playVideo();
+      this.player.seekTo(e.body.split(' ')[1], true);
     } else if (e.body.split(' ')[0] === 'PAUSED' && this.playerState === 'PLAYING') {
       this.player.pauseVideo();
     }
+  }
+  private fetchVideo(e): void {
+    console.log(e.body);
   }
 }
 
