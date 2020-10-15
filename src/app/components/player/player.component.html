@@ -4,8 +4,10 @@
     </div>
   </div>
   <div>
-    <input #box (keyup.enter)="onEnter(box.value)">
-    <button class="btn btn-info" (click)= 'roomIdM()'> View RoomId</button>
+    <label>
+      <input #box (keyup.enter)="onEnter(box.value)">
+    </label>
+    <button class="btn btn-dark" (click)= 'roomIdM()'> View RoomId</button>
   </div>
 </div>
 

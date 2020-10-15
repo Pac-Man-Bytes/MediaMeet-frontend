@@ -52,6 +52,6 @@ export class HomeComponent implements OnInit {
     );
   }
   getUID(): void {
-    console.log(firebase.auth().currentUser.uid);
+    console.log(firebase.auth().currentUser);
   }
 }
