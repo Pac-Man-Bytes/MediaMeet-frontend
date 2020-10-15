@@ -30,7 +30,8 @@
               "@firebase/remote-config",
               "@angular/fire",
               "devexpress-richedit",
-              "x-data-spreadsheet"
+              "x-data-spreadsheet",
+              "sockjs-client"
             ],
             "outputPath": "dist/MediaMeet-frontend",
             "index": "src/index.html",
@@ -46,12 +47,15 @@
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "./node_modules/font-awesome/css/font-awesome.css"
+              "./node_modules/font-awesome/css/font-awesome.css",
+              "src/assets/scss/argon.scss"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.slim.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
-              "./node_modules/popper.js/dist/umd/popper.js"
+              "./node_modules/popper.js/dist/umd/popper.js",
+              "node_modules/chart.js/dist/Chart.min.js",
+              "node_modules/clipboard/dist/clipboard.min.js"
             ]
           },
           "configurations": {

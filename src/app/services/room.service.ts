@@ -11,8 +11,8 @@ import swal from 'sweetalert2';
 })
 export class RoomService {
 
-  // curlEndPoint = 'http://localhost:8080/api/rooms';
-  curlEndPoint = 'https://mediameet-backend.herokuapp.com/api/rooms';
+  curlEndPoint = 'http://localhost:8080/api/rooms';
+  // curlEndPoint = 'https://mediameet-backend.herokuapp.com/api/rooms';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient, private router: Router) {
