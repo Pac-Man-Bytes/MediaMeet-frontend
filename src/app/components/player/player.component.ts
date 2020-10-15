@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, OnDestroy} from '@angular/core';
 import reframe from 'reframe.js';
 import {Media} from '../../clases/media';
 import {MediaService} from '../../services/media.service';
@@ -10,7 +10,7 @@ import {timeout} from 'rxjs/operators';
   templateUrl: './player.component.html',
   styleUrls: ['./player.component.css']
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent implements OnInit, OnDestroy {
   public YT: any;
   public video = '';
   public currentTrack = new Media();
@@ -69,9 +69,6 @@ export class PlayerComponent implements OnInit {
     promise.then(
       (val) => console.log(val)
     );
-    this.client.onDisconnect = (frame) => {
-      this.client.deactivate();
-    };
     this.init();
     this.initPlayer();
   }
@@ -189,7 +186,7 @@ export class PlayerComponent implements OnInit {
     }
     const promise = new Promise((resolve) => {
       setTimeout(() => {
-        this.currentTrack = this.videos.pop();
+        this.currentTrack = this.videos.shift();
         resolve();
       }, 50);
     });
@@ -228,7 +225,7 @@ export class PlayerComponent implements OnInit {
   }
   private synchronizeQueue(e): void {
     const queue = JSON.parse(e.body) as Media[];
-    this.videos = queue.reverse();
+    this.videos = queue;
   }
   private fetch(e): void{
     if (this.started){
@@ -247,6 +244,12 @@ export class PlayerComponent implements OnInit {
   }
   private fetchVideo(e): void {
     console.log(e.body);
+  }
+
+  ngOnDestroy(): void {
+    this.client.onDisconnect = (frame) => {
+      this.client.deactivate();
+    };
   }
 }
 
