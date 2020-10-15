@@ -53,7 +53,11 @@ export class PlayerComponent implements OnInit {
         this.client.subscribe('/room/queue/' + this.roomId + '/playlist', e => {
           this.synchronizeQueue(e);
         });
+        // this.client.subscribe('/room/current/' + this.roomId, e =>{
+        //   this.getCurrent(e);
+        // })
         this.client.publish({destination: '/app/queue/' + this.roomId + '/playlist', body: null});
+        this.client.publish({destination: '/app/current/' + this.roomId, body: null});
       };
     });
     promise.then(
@@ -155,10 +159,13 @@ export class PlayerComponent implements OnInit {
   onEnter(query: string): Promise<any> {
     const promise = new Promise<any>(resolve => {
       this.mediaService.getVideo(query).subscribe(media => {
-        if (!this.started || this.videos.length === 0){
-          console.log('si llego');
-          this.sinchronizeVideo(media);
-          this.setStarted();
+        if (!this.started){
+          if (this.videos.length === 0){
+            this.sinchronizeVideo(media);
+            this.setStarted();
+          }else{
+            this.next();
+          }
         }else {
           console.log('No llego nunca xd');
           this.client.publish({destination: '/app/queue/' + this.roomId, body: JSON.stringify(media)});
