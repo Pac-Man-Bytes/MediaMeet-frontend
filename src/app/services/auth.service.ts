@@ -6,7 +6,6 @@ import {AngularFireAuth} from '@angular/fire/auth';
 import {auth} from 'firebase';
 import * as firebase from 'firebase';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -22,7 +21,6 @@ export class AuthService {
     });
   }
 
-
   loginFacebookUser(): Promise<firebase.auth.UserCredential> {
     return this.oAuth.setPersistence('session').then(_ => {
       return this.oAuth.signInWithPopup(new auth.FacebookAuthProvider());
@@ -32,6 +30,12 @@ export class AuthService {
   loginGoogleUser(): Promise<firebase.auth.UserCredential> {
     return this.oAuth.setPersistence('session').then(_ => {
       return this.oAuth.signInWithPopup(new auth.GoogleAuthProvider());
+    });
+  }
+
+  loginGitHubUser(): Promise<firebase.auth.UserCredential> {
+    return this.oAuth.setPersistence('session').then(_ => {
+      return this.oAuth.signInWithPopup(new auth.GithubAuthProvider());
     });
   }
 
@@ -45,11 +49,10 @@ export class AuthService {
         .then(userData => resolve(userData),
           error => reject(error));
     });
-
   }
 
 // check if user is logged
   isAuth(): Observable<firebase.User> {
     return this.oAuth.authState.pipe(map(auth => auth));
-  }
+  }l
 }

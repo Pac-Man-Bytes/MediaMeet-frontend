@@ -61,6 +61,17 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  onLoginGitHub(): void {
+    this.authService.loginGitHubUser()
+      .then((res) => {
+        console.log(firebase.auth().currentUser.uid);
+        this.router.navigate(['preroom']);
+      }).catch(err => {
+      this.isError = true;
+      this.errorMssg = err;
+    });
+  }
+
 
   onLogout(): void {
     this.authService.logoutUser();
