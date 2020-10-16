@@ -1,18 +1,31 @@
-<div class="container"
-     fxLayout
-     fxLayout.xs="column"
-     fxLayoutAlign="center"
-     fxLayoutGap="10px"
-     fxLayoutGap.xs="0" style="margin-top: 50px">
-  <div class="item item-1" fxFlex="10%">
+<div class="row overflow-hidden">
+  <div class="col-lg-2 bg-danger">
+    Usuarios
   </div>
-  <div class="item item-2" fxFlex="10%" fxFlexOrder="3">
+  <div class="col-lg-8 bg-dark">
+    <app-player [roomId]=roomId></app-player>
+  </div>
+  <div class="col-lg-2 justify-content-left">
+    <p>Queue<span>🎵</span></p>
 
-  </div>
-  <div class="item item-3" fxFlex="80%">
-    <div class="container" >
-      <app-player [roomId] = roomId></app-player>
-    </div>
+    <table class="table table-striped queue">
+      <tbody>
+      <tr>
+        <td class="row-title"><p class="row-title-text row-title-style">{{player.currentTrack.title}}</p></td>
+        <td class="row-time">2:30</td>
+      </tr>
+      <tr *ngFor="let video of player.videos">
+        <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
+        <td class="row-time">2:30</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 
 </div>
+<div class="row bg-info p-5">
+  Chat
+</div>
+
+
+

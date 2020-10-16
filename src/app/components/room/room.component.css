@@ -1,1 +1,39 @@
+.queue {
+  table-layout: fixed;
+  width: 100%;
+  white-space: nowrap;
+}
+.queue td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row-title {
+  width: 60%;
+}
+.row-time {
+  width: 30%;
+}
+
+.row-title-text {
+  margin: 0;
+  display: inline-block;
+  white-space: nowrap;
+  animation: floatText 15s infinite linear;
+  /*Initial offset*/
+  padding: 0px 0px 0px 100%;
+}
+.row-title-style{
+  font-size: small;
+  padding: 0px 0px 0px;
+}
+.row-title-text:hover {
+  animation-play-state: paused;
+}
+@keyframes floatText {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 
