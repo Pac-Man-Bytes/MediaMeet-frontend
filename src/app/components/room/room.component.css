@@ -19,7 +19,7 @@
   margin: 0;
   display: inline-block;
   white-space: nowrap;
-  animation: floatText 15s infinite linear;
+  animation: floatText 10s infinite linear;
   /*Initial offset*/
   padding: 0px 0px 0px 100%;
 }
