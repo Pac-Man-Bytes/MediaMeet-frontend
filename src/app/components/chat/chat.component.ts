@@ -27,16 +27,12 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
    this.setMessageUser();
-   console.log(firebase.auth().currentUser.uid);
-   console.log(firebase.auth().currentUser.displayName);
-   console.log(this.roomId);
    this.client = new Client();
    this.client.webSocketFactory = () => {
       return new SockJS(this.url + '/sync-websocket');
     };
 
    this.client.onConnect = (frame) => {
-      console.log('Connected ? ' + this.client.connected + ' : ' + frame);
       this.connected = true;
 
       this.client.subscribe('/room/chat/' + this.roomId, e => {
@@ -44,7 +40,8 @@ export class ChatComponent implements OnInit, OnDestroy {
       });
       this.client.subscribe('/room/chat/' + this.roomId + '/writing', e => {
         this.writing = e.body;
-        setTimeout(() => this.writing = '', 2500);
+        console.log(e.body+'----------');
+        setTimeout(() => this.writing = '', 3000);
       });
 
       this.client.subscribe('/room/chat/' + this.roomId + '/history', e => {
@@ -52,15 +49,13 @@ export class ChatComponent implements OnInit, OnDestroy {
         this.messages = history.map(m => {
           m.date = new Date();
           return m;
-        }).reverse();
+        });
       });
       this.client.publish({destination: '/app/chat/' + this.roomId + '/history', body: firebase.auth().currentUser.uid});
       this.message.type = 'NEW_USER';
-      console.log(this.message);
       this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     };
    this.client.onDisconnect = (frame) => {
-      console.log('Connected ? ' + this.client.connected + ' : ' + frame);
       this.connected = false;
       this.message = new Message();
       this.messages = [];
@@ -88,19 +83,20 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   writingEvent(): void {
-    this.client.publish({destination: '/app/' + this.roomId + '/writing', body: this.message.username});
+    this.client.publish({destination: '/app/chat/' + this.roomId + '/writing', body: this.message.username});
   }
 
   sendMessage(): void {
     this.message.type = 'MESSAGE';
-    console.log(this.message);
     this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     this.message.text = '';
   }
   ngOnDestroy(): void {
     this.client.deactivate();
   }
+
   private setMessageUser(): void {
     this.message.username = firebase.auth().currentUser.displayName;
+    this.message.date = new Date();
   }
 }
