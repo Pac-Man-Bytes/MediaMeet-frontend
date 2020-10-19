@@ -10,6 +10,7 @@ import {PlayerComponent} from "../player/player.component";
 export class RoomComponent implements OnInit {
   public roomId;
   public p = 1;
+
   @Output() pageChange: EventEmitter<number>;
   @Output() pageBoundsCorrection: EventEmitter<number>;
   @ViewChild(PlayerComponent, {static: true}) player: PlayerComponent;
@@ -19,6 +20,19 @@ export class RoomComponent implements OnInit {
     });
   }
   ngOnInit(): void {
+  }
+  onChatChange(message): void {
+
+    if (message.substr(0, 8).toLowerCase() === '/youtube') {
+      if (message.substr(9) !== ''){
+        this.player.onEnter(message.substr(9));
+      }
+    }
+    if (message.substr(0, 5).toLowerCase() === '/next') {
+      if (message.substr(6) === '' || message.substr(6) === ' ' ){
+        this.player.next();
+      }
+    }
   }
 
 }

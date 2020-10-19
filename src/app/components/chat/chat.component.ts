@@ -1,8 +1,9 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import {Message} from '../../clases/message';
 import * as firebase from 'firebase';
+import {PlayerComponent} from "../player/player.component";
 
 @Component({
   selector: 'app-chat',
@@ -15,6 +16,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   public connected: boolean;
   public message: Message = new Message();
   public messages: Message[] = [];
+  @Output() private onChange: EventEmitter<string> = new EventEmitter<string>();
   // public url = 'https://mediameet-backend.herokuapp.com';
   public url = 'http://localhost:8080';
   public writing: string;
@@ -25,27 +27,27 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
    this.setMessageUser();
-    console.log(firebase.auth().currentUser.uid);
-    console.log(firebase.auth().currentUser.displayName);
-    console.log(this.roomId);
-    this.client = new Client();
-    this.client.webSocketFactory = () => {
+   console.log(firebase.auth().currentUser.uid);
+   console.log(firebase.auth().currentUser.displayName);
+   console.log(this.roomId);
+   this.client = new Client();
+   this.client.webSocketFactory = () => {
       return new SockJS(this.url + '/sync-websocket');
     };
 
-    this.client.onConnect = (frame) => {
+   this.client.onConnect = (frame) => {
       console.log('Connected ? ' + this.client.connected + ' : ' + frame);
       this.connected = true;
 
       this.client.subscribe('/room/chat/' + this.roomId, e => {
         this.listenMessages(e);
       });
-      this.client.subscribe('/room/chat/' + this.roomId + '/writing/', e => {
+      this.client.subscribe('/room/chat/' + this.roomId + '/writing', e => {
         this.writing = e.body;
         setTimeout(() => this.writing = '', 2500);
       });
 
-      this.client.subscribe('/room/chat/' + this.roomId + '/history/', e => {
+      this.client.subscribe('/room/chat/' + this.roomId + '/history', e => {
         const history = JSON.parse(e.body) as Message[];
         this.messages = history.map(m => {
           m.date = new Date();
@@ -57,34 +59,36 @@ export class ChatComponent implements OnInit, OnDestroy {
       console.log(this.message);
       this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     };
-    this.client.onDisconnect = (frame) => {
+   this.client.onDisconnect = (frame) => {
       console.log('Connected ? ' + this.client.connected + ' : ' + frame);
       this.connected = false;
       this.message = new Message();
       this.messages = [];
     };
-    this.client.activate();
+   this.client.activate();
   }
 
   private listenMessages(e): void {
-    let message: Message = JSON.parse(e.body) as Message;
+    const message: Message = JSON.parse(e.body) as Message;
     message.date = new Date(message.date);
-    if (!this.message.color && message.type == 'NEW_USER' && this.message.username == message.username) {
+    if (!this.message.color && message.type === 'NEW_USER' && this.message.username === message.username) {
       this.message.color = message.color;
+    }
+    if (message.text.substr(0, 1) === '/'){
+      this.onChange.emit(message.text);
     }
     this.messages.push(message);
   }
-
-  connect() {
+  connect(): void {
     this.client.activate();
   }
 
-  disconnect() {
+  disconnect(): void {
     this.client.deactivate();
   }
 
   writingEvent(): void {
-    this.client.publish({destination: '/app/' + this.roomId + '/writing/', body: this.message.username});
+    this.client.publish({destination: '/app/' + this.roomId + '/writing', body: this.message.username});
   }
 
   sendMessage(): void {
@@ -93,12 +97,10 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     this.message.text = '';
   }
-
   ngOnDestroy(): void {
     this.client.deactivate();
   }
-
-  private setMessageUser() {
+  private setMessageUser(): void {
     this.message.username = firebase.auth().currentUser.displayName;
   }
 }
