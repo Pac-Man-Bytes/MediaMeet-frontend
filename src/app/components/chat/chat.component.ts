@@ -2,7 +2,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import * as SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import {Message} from '../../clases/message';
-import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase';
 
 @Component({
@@ -10,7 +9,7 @@ import * as firebase from 'firebase';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   private client: Client;
   public sending: boolean;
   public connected: boolean;
@@ -25,7 +24,7 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.message.username = firebase.auth().currentUser.uid;
+   this.setMessageUser();
     console.log(firebase.auth().currentUser.uid);
     console.log(firebase.auth().currentUser.displayName);
     console.log(this.roomId);
@@ -35,19 +34,31 @@ export class ChatComponent implements OnInit {
     };
 
     this.client.onConnect = (frame) => {
-      console.log('Conectados ? ' + this.client.connected + ' : ' + frame);
+      console.log('Connected ? ' + this.client.connected + ' : ' + frame);
       this.connected = true;
 
-      this.client.subscribe('/room/chat' + this.roomId, e => {
+      this.client.subscribe('/room/chat/' + this.roomId, e => {
         this.listenMessages(e);
       });
-      this.client.subscribe('/room/chat/writing' + this.roomId, e => {
+      this.client.subscribe('/room/chat/' + this.roomId + '/writing/', e => {
         this.writing = e.body;
         setTimeout(() => this.writing = '', 2500);
       });
+
+      this.client.subscribe('/room/chat/' + this.roomId + '/history/', e => {
+        const history = JSON.parse(e.body) as Message[];
+        this.messages = history.map(m => {
+          m.date = new Date();
+          return m;
+        }).reverse();
+      });
+      this.client.publish({destination: '/app/chat/' + this.roomId + '/history', body: firebase.auth().currentUser.uid});
+      this.message.type = 'NEW_USER';
+      console.log(this.message);
+      this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     };
     this.client.onDisconnect = (frame) => {
-      console.log('Conectados ? ' + this.client.connected + ' : ' + frame);
+      console.log('Connected ? ' + this.client.connected + ' : ' + frame);
       this.connected = false;
       this.message = new Message();
       this.messages = [];
@@ -64,17 +75,22 @@ export class ChatComponent implements OnInit {
     this.messages.push(message);
   }
 
-  conectar() {
+  connect() {
     this.client.activate();
   }
 
-  desconectar() {
+  disconnect() {
     this.client.deactivate();
+  }
+
+  writingEvent(): void {
+    this.client.publish({destination: '/app/' + this.roomId + '/writing/', body: this.message.username});
   }
 
   sendMessage(): void {
     this.message.type = 'MESSAGE';
-    this.client.publish({destination: '/app/chat' + this.roomId, body: JSON.stringify(this.message)});
+    console.log(this.message);
+    this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     this.message.text = '';
   }
 
@@ -82,4 +98,7 @@ export class ChatComponent implements OnInit {
     this.client.deactivate();
   }
 
+  private setMessageUser() {
+    this.message.username = firebase.auth().currentUser.displayName;
+  }
 }

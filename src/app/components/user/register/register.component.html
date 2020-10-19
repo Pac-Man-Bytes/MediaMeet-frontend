@@ -63,7 +63,7 @@
           <div class="text-center text-muted mb-4">
             <small>Or sign up with credentials</small>
           </div>
-          <form role="form">
+          <form #formRegister="ngForm" (ngSubmit)="onUserRegister()">
             <div class="form-group">
 
             </div>
@@ -72,7 +72,17 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                 </div>
-                <input class="form-control" placeholder="Email" type="email">
+                <input type="text" name="name" class="form-control" placeholder="Name"
+                       [(ngModel)]="name">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group input-group-alternative mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                </div>
+                <input type="email" name="email" class="form-control" placeholder="Email" required
+                       minlength="8" [(ngModel)]="email">
               </div>
             </div>
             <div class="form-group">
@@ -80,11 +90,12 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                 </div>
-                <input class="form-control" placeholder="Password" type="password">
+                <input type="password" name="password" class="form-control" placeholder="Password"
+                       required minlength="5" maxlength="10" [(ngModel)]="passwd">
               </div>
             </div>
             <div class="text-center">
-              <button type="button" class="btn btn-dark mt-4">Create account</button>
+              <button type="submit" class="btn btn-dark mt-4">Create account</button>
             </div>
           </form>
         </div>
