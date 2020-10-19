@@ -5,25 +5,7 @@
   </div>
   <div>
     <input #box (keyup.enter)="onEnter(box.value)">
-    <button class="btn btn-info">Next</button>
-    <table class="table table-condensed table-bordered table-striped">
-      <thead>
-      <tr>
-        <th></th>
-        <th>id</th>
-        <th>title</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let video of videos">
-        <td><img src= "{{video.image}}" class="img-thumbnail rounded"
-                 style="width:64px;cursor:pointer;">
-        </td>
-        <td>{{video.id}}</td>
-        <td>{{video.title}}</td>
-      </tr>
-      </tbody>
-    </table>
+    <button class="btn btn-info" (click)="next()">Next</button>
   </div>
 </div>
 

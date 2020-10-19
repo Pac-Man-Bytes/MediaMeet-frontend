@@ -220,6 +220,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
   private putNextSong(e): void {
     const media = JSON.parse(e.body) as Media;
+    this.currentTrack = media;
     this.video = media.id;
     this.player.loadVideoById(media.id, media.time, 'large');
   }

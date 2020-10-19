@@ -1,20 +1,38 @@
-<div class="container"
-     fxLayout
-     fxLayout.xs="column"
-     fxLayoutAlign="center"
-     fxLayoutGap="10px"
-     fxLayoutGap.xs="0" style="margin-top: 50px">
-  <div class="item item-1" fxFlex="10%">
+<div class="row overflow-hidden">
+  <div class="col-lg-2 bg-danger">
+    Usuarios
   </div>
-  <div class="item item-2" fxFlex="10%" fxFlexOrder="3">
+  <div class="col-lg-8 bg-dark">
+    <app-player [roomId]=roomId></app-player>
+  </div>
+  <div class="col-lg-2 justify-content-left">
+    <p>Queue<span>🎵</span></p>
 
-  </div>
-  <div class="item item-3" fxFlex="80%">
-    <div class="container" >
-      <app-player [roomId] = roomId></app-player>
-    </div>
+    <table class="table table-striped queue">
+      <tbody>
+      <tr>
+        <td class="row-title"><p class="row-title-text row-title-style">{{player.currentTrack.title}}</p></td>
+        <td class="row-time">{{player.currentTrack.duration}}</td>
+      </tr>
+      <tr *ngFor="let video of player.videos  | paginate: { itemsPerPage: 3, currentPage: p }">
+        <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
+        <td class="row-time">{{video.duration}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p = $event"
+                         directionLinks="false"
+                         autoHide="true"
+                         responsive="true"
+    ></pagination-controls>
   </div>
 
   <app-chat [roomId] = roomId></app-chat>
 
 </div>
+<div class="row bg-info p-5">
+  Chat
+</div>
+
+
+
