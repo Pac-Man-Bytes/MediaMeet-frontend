@@ -3,4 +3,5 @@ export class Media {
   title: string;
   image: string;
   time: number;
+  duration: string;
 }

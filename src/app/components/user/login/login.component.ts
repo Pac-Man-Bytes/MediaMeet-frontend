@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit {
   }
 
   public isError = false;
+  public errorMssg = '';
   public email = '';
   public passwd = '';
 
@@ -29,7 +30,10 @@ export class LoginComponent implements OnInit {
           console.log('resUser', res);
           this.router.navigate(['preroom']);
           console.log(firebase.auth().currentUser.uid);
-        }).catch(err => console.log('Error', err));
+        }).catch(err => {
+        this.isError = true;
+        this.errorMssg = err;
+      });
     });
 
   }
@@ -40,7 +44,10 @@ export class LoginComponent implements OnInit {
         console.log('resUser', res);
         this.router.navigate(['preroom']);
         console.log(firebase.auth().currentUser.uid);
-      }).catch(err => console.log('Error', err));
+      }).catch(err => {
+      this.isError = true;
+      this.errorMssg = err;
+    });
   }
 
   onLoginFacebook(): void {
@@ -48,7 +55,21 @@ export class LoginComponent implements OnInit {
       .then((res) => {
         console.log(firebase.auth().currentUser.uid);
         this.router.navigate(['preroom']);
-      }).catch(err => console.log('Error', err));
+      }).catch(err => {
+      this.isError = true;
+      this.errorMssg = err;
+    });
+  }
+
+  onLoginGitHub(): void {
+    this.authService.loginGitHubUser()
+      .then((res) => {
+        console.log(firebase.auth().currentUser.uid);
+        this.router.navigate(['preroom']);
+      }).catch(err => {
+      this.isError = true;
+      this.errorMssg = err;
+    });
   }
 
 

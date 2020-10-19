@@ -1,44 +1,103 @@
-<section id="login" class="mb-5 mt-5">
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">
-        <div class="card_login">
-          <div class="card">
-            <div class="card-body text-center">
+<!--<section id="login" class="mb-5 mt-5">-->
+<!--  <div class="container">-->
+<!--    <div class="row">-->
+<!--      <div class="col-xs-12 col-sm-6 col-md-4 mx-auto">-->
+<!--        <div class="card_login">-->
+<!--          <div class="card">-->
+<!--            <div class="card-body text-center">-->
 
-              <form #formLogin="ngForm" (ngSubmit)="onLogin()">
-                <h1 class="h3 mb-3 font-weight-normal" *ngIf="!isError">Login</h1>
-                <div class="alert alert-danger" role="alert" *ngIf="isError">
-                  {{isError}}
-                  Something is wrong!
+<!--              <form #formLogin="ngForm" (ngSubmit)="onLogin()">-->
+<!--                <h1 class="h3 mb-3 font-weight-normal" *ngIf="!isError">Login</h1>-->
+<!--                <div class="alert alert-danger" role="alert" *ngIf="isError">-->
+<!--                  {{errorMssg}}-->
+<!--                  Something is wrong!-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                  <input [(ngModel)]="email" type="email" id="email" name="email" class="form-control"-->
+<!--                         placeholder="Email" required>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                  <input [(ngModel)]="passwd" type="password" id="password" name="password" class="form-control"-->
+<!--                         placeholder="Password" required>-->
+<!--                </div>-->
+<!--                <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>-->
+<!--                <div class="form-group">-->
+<!--                  <a routerLink="/user/register" class="form-control login-user">Are you new ?</a>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                  <button class="btn btn-block btn-social btn-facebook" (click)="onLoginFacebook()">-->
+<!--                    <span class="fa fa-facebook"></span>-->
+<!--                    Facebook-->
+<!--                  </button>-->
+<!--                  <button class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()">-->
+<!--                    <span class="fa fa-google"></span>-->
+<!--                    Google-->
+<!--                  </button>-->
+<!--                </div>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+<link href="/assets/vendor/nucleo/css/nucleo.css" rel="stylesheet">
+<div class="container mt--8 pb-5 ">
+  <div class="row justify-content-center ">
+    <div class="col-lg-5 col-md-7 alignmargin">
+      <div class="card bg-secondary shadow border-0">
+        <div class="card-header bg-transparent pb-5">
+          <div class="text-muted text-center mt-2 mb-3"><small>Sign in with</small></div>
+          <div class="btn-wrapper text-center">
+            <a href="javascript:void(0)" class="btn btn-neutral btn-icon" (click)="onLoginFacebook()">
+              <span class="btn-inner--icon"><img src="../assets/img/icons/common/facebook.svg"></span>
+              <span class="btn-inner--text">Facebook</span>
+            </a>
+            <a href="javascript:void(0)" class="btn btn-neutral btn-icon" (click)="onLoginGoogle()">
+              <span class="btn-inner--icon"><img src="../assets/img/icons/common/google.svg"></span>
+              <span class="btn-inner--text">Google</span>
+            </a>
+            <br>
+            <br>
+            <a href="javascript:void(0)" class="btn btn-neutral btn-icon" (click)="onLoginGitHub()">
+              <span class="btn-inner--icon"><img src="../assets/img/icons/common/github.svg"></span>
+              <span class="btn-inner--text">GitHub</span>
+            </a>
+          </div>
+        </div>
+        <div class="card-body px-lg-5 py-lg-5">
+          <div class="text-center text-muted mb-4">
+            <small>Or sign in with credentials</small>
+          </div>
+          <form #formLogin="ngForm" (ngSubmit)="onLogin()">
+            <div class="form-group mb-3">
+              <div class="input-group input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                 </div>
-                <div class="form-group">
-                  <input [(ngModel)]="email" type="email" id="email" name="email" class="form-control"
-                         placeholder="Email" required>
-                </div>
-                <div class="form-group">
-                  <input [(ngModel)]="passwd" type="password" id="password" name="password" class="form-control"
-                         placeholder="Password" required>
-                </div>
-                <button type="submit" class="btn btn-lg btn-primary btn-block">Login</button>
-                <div class="form-group">
-                  <a routerLink="/user/register" class="form-control login-user">Are you new ?</a>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-block btn-social btn-facebook" (click)="onLoginFacebook()">
-                    <span class="fa fa-facebook"></span>
-                    Facebook
-                  </button>
-                  <button class="btn btn-block btn-social btn-google" (click)="onLoginGoogle()">
-                    <span class="fa fa-google"></span>
-                    Google
-                  </button>
-                </div>
-              </form>
+                <input [(ngModel)]="email" type="email" id="email" name="email" class="form-control"
+                       placeholder="Email" required>
+              </div>
             </div>
+            <div class="form-group">
+              <div class="input-group input-group-alternative">
+                <div class="input-group-prepend">
+                  <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                </div>
+                <input class="form-control" [(ngModel)]="passwd" type="password" id="password" name="password"
+                       placeholder="Password" required>
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-dark my-4">Sign in</button>
+            </div>
+          </form>
+          <div class="text-center">
+            <a routerLink="/user/register"qn href="javascript:void(0)" class="text-light"><small>Create new account</small></a>
           </div>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
