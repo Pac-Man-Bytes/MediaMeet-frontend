@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
   UDI: string;
   UName: string;
 
-  constructor(private roomService: RoomService, private router: Router, private oAuth: AngularFireAuth, private services: ProfileService) {
+  constructor(private roomService: RoomService, private router: Router, private oAuth: AngularFireAuth, private profileServices: ProfileService) {
     this.room = new Room();
     this.cRoom = new Room();
   }
@@ -35,9 +35,9 @@ export class HomeComponent implements OnInit {
   }
 
   createRoom(): void {
-    let profile = new Profile();
-    profile.id = firebase.auth().currentUser.uid;
-    this.cRoom.members.push(profile);
+    this.profileServices.getProfile(firebase.auth().currentUser.uid).subscribe(res => {
+      this.cRoom.members.push(res);
+    });
     this.roomService.createRoom(this.cRoom).subscribe(resp => {
       swal.fire('Sala creada', resp.id, 'success');
       this.cRoom.id = resp.id;
