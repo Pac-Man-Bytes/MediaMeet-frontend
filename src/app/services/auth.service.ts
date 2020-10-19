@@ -43,10 +43,12 @@ export class AuthService {
     this.oAuth.signOut();
   }
 
-  registerUser(email, passwd): Promise<any> {
+  registerUser(email, passwd, name): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.oAuth.createUserWithEmailAndPassword(email, passwd)
-        .then(userData => resolve(userData),
+        .then(userData => userData.user.updateProfile({
+            displayName: name
+          }).then(r => resolve(userData)),
           error => reject(error));
     });
   }
@@ -54,5 +56,7 @@ export class AuthService {
 // check if user is logged
   isAuth(): Observable<firebase.User> {
     return this.oAuth.authState.pipe(map(auth => auth));
-  }l
+  }
+
+  l;
 }

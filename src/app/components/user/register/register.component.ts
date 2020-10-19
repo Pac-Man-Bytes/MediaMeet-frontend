@@ -9,6 +9,7 @@ import * as firebase from 'firebase';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  public name: string = '';
   public email: string = '';
   public passwd: string = '';
   public errorMssg: string = '';
@@ -21,9 +22,9 @@ export class RegisterComponent implements OnInit {
   }
 
   onUserRegister(): void {
-    this.authService.registerUser(this.email, this.passwd)
+    this.authService.registerUser(this.email, this.passwd,this.name)
       .then((res) => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/preroom']);
       }).catch(error => {
       this.errorMssg = error;
     });

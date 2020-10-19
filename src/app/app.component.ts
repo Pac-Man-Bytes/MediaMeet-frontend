@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MediaObserver, MediaChange} from '@angular/flex-layout';
 import {Subscription} from 'rxjs';
 import {filter, map} from 'rxjs/operators';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent implements OnInit, OnDestroy {
   mediaSub: Subscription;
   deviceXs: boolean;
 
-  constructor(public mediaObserver: MediaObserver) {
+  constructor(private oAuth: AngularFireAuth, public mediaObserver: MediaObserver) {
   }
 
   ngOnInit(): void {
@@ -23,12 +24,13 @@ export class AppComponent implements OnInit, OnDestroy {
     ).subscribe(
       (result: MediaChange) => {
         console.log(result.mqAlias);
-        this.deviceXs = result.mqAlias === 'xs' ? true : false;
+        this.deviceXs = result.mqAlias === 'xs';
       }
     );
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy(): void { //TODO Set timeout logout
+    this.oAuth.signOut().then(() => console.log('ENDED :D'));
     this.mediaSub.unsubscribe();
   }
 }
