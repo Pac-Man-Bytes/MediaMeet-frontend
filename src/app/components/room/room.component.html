@@ -12,14 +12,19 @@
       <tbody>
       <tr>
         <td class="row-title"><p class="row-title-text row-title-style">{{player.currentTrack.title}}</p></td>
-        <td class="row-time">2:30</td>
+        <td class="row-time">{{player.currentTrack.duration}}</td>
       </tr>
-      <tr *ngFor="let video of player.videos">
+      <tr *ngFor="let video of player.videos  | paginate: { itemsPerPage: 3, currentPage: p }">
         <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
-        <td class="row-time">2:30</td>
+        <td class="row-time">{{video.duration}}</td>
       </tr>
       </tbody>
     </table>
+    <pagination-controls (pageChange)="p = $event"
+                         directionLinks="false"
+                         autoHide="true"
+                         responsive="true"
+    ></pagination-controls>
   </div>
 
 </div>

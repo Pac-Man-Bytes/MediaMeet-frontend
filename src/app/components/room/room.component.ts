@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PlayerComponent} from "../player/player.component";
 
@@ -9,6 +9,9 @@ import {PlayerComponent} from "../player/player.component";
 })
 export class RoomComponent implements OnInit {
   public roomId;
+  public p = 1;
+  @Output() pageChange: EventEmitter<number>;
+  @Output() pageBoundsCorrection: EventEmitter<number>;
   @ViewChild(PlayerComponent, {static: true}) player: PlayerComponent;
   constructor(private route: ActivatedRoute) {
     this.route.params.subscribe(params => {

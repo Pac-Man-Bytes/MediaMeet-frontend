@@ -15,6 +15,7 @@ import {FormsModule} from '@angular/forms';
 import {environment} from '../environments/environment';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
+import {NgxPaginationModule} from 'ngx-pagination';
 import {AngularFireAuth} from '@angular/fire/auth';
 
 // Services
@@ -40,7 +41,8 @@ import {MatInputModule} from '@angular/material/input';
     FormsModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    NgxPaginationModule
   ],
   providers: [MediaService, HttpClient, AngularFireAuth],
   bootstrap: [AppComponent]
