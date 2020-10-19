@@ -1,63 +1,58 @@
-# MediaMeet-backend
+---
+description: >-
+  Media Meet is a web based platform where members can share content in realtime
+  and share their feelings with the people inside the rooms.
+---
 
-## Logo
+# MediaMeet User Manual
 
-![](https://cdn.discordapp.com/attachments/748398289514397717/763456425099132978/Screen_Shot_2020-10-07_at_12.41.11_PM.png)
+## Run the Application
 
-## Architecture
+There are two ways of using our app, currently is under development so can be run with the help of the development server thanks to Angular 10, but exists the posibility to access the app with a browser.
 
-+ Component Diagram
-![](https://cdn.discordapp.com/attachments/749330138407370856/763404991800410152/unknown.png)
+#### Via browser
 
-+ Packages Diagram
-![](https://cdn.discordapp.com/attachments/749330138407370856/763411410792218654/package.png)
+Through the following link you can access the plataform
 
-+ Model
-![](https://cdn.discordapp.com/attachments/749330138407370856/763405674520510475/model.png)
+```text
+https://media-meet.web.appthroug
+```
 
-
-
-## Getting Started
-The following steps are required in order to get a copy of the project, be able to run it and perform tests.
-### Prerequisites
-You need to have installed the next software to successfully run the project:
-
-* Angular
-* Maven
-* Git
-
-## Development server
+#### Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Build
+## Step by Step guide
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+1. Access to the platform
 
+![](.gitbook/assets/screen-shot-2020-10-19-at-11.17.35-am.png)
+
+2. Once you are in the login page, you can either log in with Google, Facebook, GitHub or with an email and password 
+
+![](.gitbook/assets/screen-shot-2020-10-19-at-11.19.43-am.png)
+
+![](.gitbook/assets/screen-shot-2020-10-19-at-11.19.08-am%20%281%29.png)
+
+![](.gitbook/assets/screen-shot-2020-10-19-at-11.19.20-am%20%283%29.png)
+
+![](.gitbook/assets/screen-shot-2020-10-19-at-11.19.20-am%20%281%29.png)
+
+3. Other feature offered in the plataform is to create a new user so register yourself so you can access as shown bellow
+
+![](.gitbook/assets/screen-shot-2020-10-19-at-11.20.18-am.png)
+
+4. Once inside the application, you have the possibility to either create a new room so different users access it or join a existent room 
+
+![](.gitbook/assets/screen-shot-2020-10-19-at-11.20.40-am.png)
+
+![](.gitbook/assets/screen-shot-2020-10-19-at-11.19.20-am%20%282%29.png)
 
 ## Built With
+
 * Angular 10
 * Git - Version-control system
 * MongoDB
-
-
-## CI/CD Badges
-
-For the continous integration, the project has CI with Circle Ci
-
- [![CircleCI](https://circleci.com/gh/circleci/circleci-docs.svg?style=svg)](https://app.circleci.com/pipelines/github/Pac-Man-Bytes/MediaMeet-frontend)
-
-
-For the continous deployment, the project has CD with Firebase and Github Actions
-
-![Build_and_Deploy](https://github.com/Pac-Man-Bytes/MediaMeet-frontend/workflows/Build_and_Deploy/badge.svg)
-
-
-For the code quality
-
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7c11134a1b5e478090c93293fc1e1296)](https://www.codacy.com/gh/Pac-Man-Bytes/MediaMeet-frontend/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Pac-Man-Bytes/MediaMeet-frontend&amp;utm_campaign=Badge_Grade)
-
-
 
 ## Versioning
 
@@ -73,4 +68,5 @@ We use GitFlow for versioning. For the versions available, see the [tags on this
 
 ## License
 
- This project is licensed under the MIT License - see the LICENSE.md file for details.
+This project is licensed under the MIT License - see the LICENSE.md file for details.
+
