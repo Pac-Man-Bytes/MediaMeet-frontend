@@ -1,4 +1,4 @@
-# MediaMeet-backend
+# MediaMeet-FrontEnd
 
 ## Logo
 
