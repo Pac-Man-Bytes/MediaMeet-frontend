@@ -17,12 +17,10 @@ import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {AngularFireAuth} from '@angular/fire/auth';
-
 // Services
 import {MediaService} from './services/media.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {MatInputModule} from '@angular/material/input';
-
 @NgModule({
   declarations: [
     AppComponent,

@@ -22,7 +22,6 @@ export class RoomComponent implements OnInit {
   ngOnInit(): void {
   }
   onChatChange(message): void {
-
     if (message.substr(0, 8).toLowerCase() === '/youtube') {
       if (message.substr(9) !== ''){
         this.player.onEnter(message.substr(9));
