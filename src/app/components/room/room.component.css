@@ -9,22 +9,32 @@
   text-overflow: ellipsis;
 }
 .row-title {
-  width: 60%;
+  width: 100%;
+  background: #cd201f;
+  border-radius: 3px;
+  border-bottom: 1px solid lightgray ;
 }
 .row-time {
   width: 30%;
 }
-
+.time{
+  margin: 0;
+  display: inline-block;
+  white-space: nowrap;
+  font-size: medium;
+  color: #D9D9D9;
+}
 .row-title-text {
   margin: 0;
   display: inline-block;
   white-space: nowrap;
-  animation: floatText 10s infinite linear;
+  color: #D9D9D9;
+  animation: floatText 14s infinite linear;
   /*Initial offset*/
   padding: 0px 0px 0px 100%;
 }
 .row-title-style{
-  font-size: small;
+  font-size: medium;
   padding: 0px 0px 0px;
 }
 .row-title-text:hover {
@@ -32,7 +42,7 @@
 }
 @keyframes floatText {
   to {
-    transform: translateX(-100%);
+    transform: translateX(100%);
   }
 }
 
