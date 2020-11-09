@@ -3,7 +3,7 @@ import * as SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import {Message} from '../../clases/message';
 import * as firebase from 'firebase';
-import {PlayerComponent} from "../player/player.component";
+import {PlayerComponent} from '../player/player.component';
 
 @Component({
   selector: 'app-chat',
@@ -26,13 +26,13 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   this.setMessageUser();
-   this.client = new Client();
-   this.client.webSocketFactory = () => {
+    this.setMessageUser();
+    this.client = new Client();
+    this.client.webSocketFactory = () => {
       return new SockJS(this.url + '/sync-websocket');
     };
 
-   this.client.onConnect = (frame) => {
+    this.client.onConnect = (frame) => {
       this.connected = true;
 
       this.client.subscribe('/room/chat/' + this.roomId, e => {
@@ -40,7 +40,7 @@ export class ChatComponent implements OnInit, OnDestroy {
       });
       this.client.subscribe('/room/chat/' + this.roomId + '/writing', e => {
         this.writing = e.body;
-        console.log(e.body+'----------');
+        console.log(e.body + '----------');
         setTimeout(() => this.writing = '', 3000);
       });
 
@@ -55,12 +55,12 @@ export class ChatComponent implements OnInit, OnDestroy {
       this.message.type = 'NEW_USER';
       this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     };
-   this.client.onDisconnect = (frame) => {
+    this.client.onDisconnect = (frame) => {
       this.connected = false;
       this.message = new Message();
       this.messages = [];
     };
-   this.client.activate();
+    this.client.activate();
   }
 
   private listenMessages(e): void {
@@ -69,11 +69,12 @@ export class ChatComponent implements OnInit, OnDestroy {
     if (!this.message.color && message.type === 'NEW_USER' && this.message.username === message.username) {
       this.message.color = message.color;
     }
-    if (message.text.substr(0, 1) === '/'){
+    if (message.text.substr(0, 1) === '/') {
       this.onChange.emit(message.text);
     }
     this.messages.push(message);
   }
+
   connect(): void {
     this.client.activate();
   }
@@ -91,6 +92,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     this.message.text = '';
   }
+
   ngOnDestroy(): void {
     this.client.deactivate();
   }
