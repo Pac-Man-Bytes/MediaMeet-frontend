@@ -5,24 +5,26 @@
   <div #scrollChat [scrollTop]="scrollChat.scrollHeight" class="card-body" style="
   overflow-y: scroll; height:180px"
        *ngIf="connected">
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item list-group-item-light" *ngFor="let message of messages">
-        <span *ngIf="message.type =='NEW_USER'">{{message.date | date:'shortTime'}}
+    <mat-list role="list" *ngFor="let message of messages">
+      <mat-list-item role="listitem">
+        <span *ngIf="message.type =='NEW_USER'">
           @ <span [ngStyle]="{'color':message.color}">{{message.username}}</span>
           {{message.text}} </span>
-        <span *ngIf="message.type =='MESSAGE'">{{message.date | date:'shortTime'}}
+        <span *ngIf="message.type =='MESSAGE'">
           <span [ngStyle]="{'color':message.color}">{{message.username}}</span> dice:<br>
           {{message.text}}</span>
-      </li>
-    </ul>
+      </mat-list-item>
+      <br>
+    </mat-list>
   </div>
   <div class="card-footer" *ngIf="connected">
-    <form class="form-inline">
+    <form class="form-inline" #form="ngForm"
+          (keydown.enter)="sendMessage()">
       <div class="form-group mx-3">
         <input type="text" class="form-control" placeholder="Escribe un mensaje..." name="texto"
                [(ngModel)]="message.text" (keyup)="writingEvent()">
       </div>
-      <button class="btn btn-primary" type="submit" (click)="sendMessage()">Enviar</button>
+<!--      <button class="btn btn-primary" type="submit" (click)="sendMessage()">Enviar</button>-->
     </form>
     <div>{{writing}}</div>
   </div>
