@@ -2,7 +2,7 @@
   <table class="table table-striped queue">
     <tbody>
     <tr>
-      <td class="row-title" *ngIf="player.currentTrack.title"   >
+      <td class="row-title" *ngIf="player.currentTrack.title">
         <span class="time"><i class="fa fa-music"></i> Now Playing &nbsp;&nbsp;</span>
         <span class="time"><i class="fa fa-clock-o"></i> {{player.currentTrack.duration}}</span>
         <p class="row-title-text row-title-style">
@@ -11,30 +11,29 @@
       </td>
     </tr>
   </table>
-  <div class="col-lg-8">
-    <app-player [roomId]=roomId></app-player>
+  <div class="col-lg-8 box">
+    <div class="inner"><app-player [roomId]=roomId></app-player></div>
   </div>
-  <div class="col-lg-3 justify-content-center">
-    <app-chat [roomId] = roomId (onChange)="onChatChange($event)"></app-chat>
+  <div class="col-lg-4 box">
+    <app-chat [roomId]=roomId (onChange)="onChatChange($event)"></app-chat>
+  </div>
+  <div class="row justify-content-center">
+    <p>Queue<span>🎵 <button class="btn btn-dark" (click)="player.next()">Next</button></span></p>
+    <table class="table table-striped queue">
+      <tbody>
 
+      <tr *ngFor="let video of player.videos  | paginate: { itemsPerPage: 3, currentPage: p }">
+        <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
+        <td class="row-time">{{video.duration}}</td>
+      </tr>
+      </tbody>
+    </table>
     <pagination-controls (pageChange)="p = $event"
                          directionLinks="false"
                          autoHide="true"
                          responsive="true"
     ></pagination-controls>
-</div>
-<div class="row justify-content-center">
-  <p>Queue<span>🎵 <button class="btn btn-dark" (click)="player.next()">Next</button></span></p>
-  <table class="table table-striped queue">
-    <tbody>
-
-    <tr *ngFor="let video of player.videos  | paginate: { itemsPerPage: 3, currentPage: p }">
-      <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
-      <td class="row-time">{{video.duration}}</td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+  </div>
 </div>
 
 
