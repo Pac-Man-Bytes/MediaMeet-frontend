@@ -4,8 +4,10 @@ import {Room} from '../../clases/room';
 import swal from 'sweetalert2';
 import {Router} from '@angular/router';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {ProfileService} from '../../services/profile.service';
 import Swal from 'sweetalert2';
 import * as firebase from 'firebase';
+import {Profile} from '../../clases/profile';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +21,7 @@ export class HomeComponent implements OnInit {
   UDI: string;
   UName: string;
 
-  constructor(private roomService: RoomService, private router: Router, private oAuth: AngularFireAuth) {
+  constructor(private roomService: RoomService, private router: Router, private oAuth: AngularFireAuth, private profileServices: ProfileService) {
     this.room = new Room();
     this.cRoom = new Room();
   }
@@ -33,6 +35,9 @@ export class HomeComponent implements OnInit {
   }
 
   createRoom(): void {
+    this.profileServices.getProfile(firebase.auth().currentUser.uid).subscribe(res => {
+      this.cRoom.members.push(res);
+    });
     this.roomService.createRoom(this.cRoom).subscribe(resp => {
       swal.fire('Sala creada', resp.id, 'success');
       this.cRoom.id = resp.id;
