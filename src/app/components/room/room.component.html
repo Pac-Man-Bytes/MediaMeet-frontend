@@ -1,19 +1,24 @@
 <div class="row overflow-hidden">
+
   <table class="table table-striped queue my-2">
     <tbody>
     <tr>
-      <td class="row-title navbar-dark bg-dark text-left" style="width: 10%">
-        <div class="search-box">
-          <input type="text" class="search-txt" type="text" placeholder="Busca un video">
-          <a class="search-btn" href="#">
-            <i class="fa fa-search"></i>
-          </a>
+
+      <td class="row-title navbar-dark bg-dark text-left" style="height: 60px">
+        <div class="wrapper bg-dark">
+          <div class="input-data bg-dark">
+            <input type="text" class="bg-dark inputsito" required>
+            <div class="underline">
+            </div>
+            <label>Busca un video 📹</label>
+          </div>
         </div>
       </td>
-      <td class="row-title navbar-dark bg-dark text-right pr-0 paddingTd" style="width: 10%" *ngIf="player.currentTrack.title">
-        <div class="btn btn-dark btnNext" (click)="player.next()" >
-          <img src="https://media.discordapp.net/attachments/352624122301513730/775738358160162816/next_1.png?width=475&height=475"
-               class="btnNextImg">
+      <td class="row-title navbar-dark bg-dark text-right pr-0 paddingTd" style="width: 5%">
+        <div class="btn btn-dark btnNext" (click)="player.next()" *ngIf="player.currentTrack.title">
+          <img
+            src="https://media.discordapp.net/attachments/352624122301513730/775738358160162816/next_1.png?width=475&height=475"
+            class="btnNextImg">
         </div>
       </td>
       <td class="w-50 row-title navbar-dark bg-dark paddingTd " *ngIf="player.currentTrack.title">
@@ -28,7 +33,9 @@
     </tr>
   </table>
   <div class="col-lg-8 box">
-    <div class="inner"><app-player [roomId]=roomId></app-player></div>
+    <div class="inner">
+      <app-player [roomId]=roomId></app-player>
+    </div>
   </div>
   <div class="col-lg-4 box">
     <app-chat [roomId]=roomId (onChange)="onChatChange($event)"></app-chat>
