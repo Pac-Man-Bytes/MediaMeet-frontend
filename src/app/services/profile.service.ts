@@ -5,6 +5,7 @@ import {Observable, throwError} from 'rxjs';
 import {Profile} from '../clases/profile';
 import {Router} from '@angular/router';
 import swal from 'sweetalert2';
+import {Room} from '../clases/room';
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +31,9 @@ export class ProfileService{
         return throwError(e);
       })
     );
+  }
+
+  addProfileRoom(id: string, room: Room): Observable<unknown>{
+    return this.http.patch<unknown>(`${this.urlEndPoint}/profile/${id}`, room, {headers: this.httpHeaders});
   }
 }
