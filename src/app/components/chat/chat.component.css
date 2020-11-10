@@ -28,4 +28,58 @@
 .chatC::-webkit-scrollbar-track:active {
   background: #d4d4d4;
 }
+.headerChat{
+  background: #dd4b39;
 
+}
+.headerChatText{
+  color:seashell;
+  font-size: large;
+}
+.chatScroll{
+  overflow-y: scroll;
+  height:21rem;
+}
+.connectMessage{
+  text-align: left;
+  font-size: 11px;
+  overflow-x:hidden;
+  white-space: pre-wrap;
+}
+.profileImage{
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}
+.profileUsername{
+  padding-bottom:0;
+  margin-bottom:0;
+}
+.chatMessage{
+  color:#212529;
+  position: relative;
+  left: 32px;
+  top: -3px;
+  overflow-x:hidden;
+  white-space: pre-wrap;
+}
+.sendButton{
+  border-radius: 50%;
+  background: #dd4b39;
+  height: 42.6666666667px;
+  width: 42.6666666667px;
+  cursor: pointer
+}
+.sendImage{
+  width: 25.6px;
+  height: 25.6px;
+  position: relative;
+  bottom: -8.6666666667px;
+  right: -10.6666666667px
+}
+.inputChat{
+  margin-right: 15px;
+  width: 80%
+
+}

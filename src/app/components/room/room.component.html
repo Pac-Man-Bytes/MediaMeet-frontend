@@ -1,8 +1,8 @@
 <div class="row overflow-hidden">
-  <table class="table table-striped queue">
+  <table class="table table-striped queue my-0">
     <tbody>
     <tr>
-      <td class="row-title navbar-dark bg-dark" *ngIf="player.currentTrack.title">
+      <td class="row-title navbar-dark bg-dark text-center" *ngIf="player.currentTrack.title">
         <span class="time"><i class="fa fa-music"></i> Now Playing &nbsp;&nbsp;</span>
         <span class="time"><i class="fa fa-clock-o"></i> {{player.currentTrack.duration}}</span>
         <p class="row-title-text row-title-style">
@@ -18,10 +18,10 @@
     <app-chat [roomId]=roomId (onChange)="onChatChange($event)"></app-chat>
   </div>
   <div class="row justify-content-center">
-    <p>Queue<span>🎵 <button class="btn btn-dark" (click)="player.next()">Next</button></span></p>
+    <a href="" class ="btnCool btn1 my-2">Queue <span><i class="fa fa-music"></i></span></a>
+
     <table class="table table-striped queue">
       <tbody>
-
       <tr *ngFor="let video of player.videos  | paginate: { itemsPerPage: 3, currentPage: p }">
         <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
         <td class="row-time">{{video.duration}}</td>
