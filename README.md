@@ -1,4 +1,4 @@
-# MediaMeet-backend
+# MediaMeet-FrontEnd
 
 ## Logo
 
@@ -29,6 +29,10 @@ You need to have installed the next software to successfully run the project:
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+
+## Production Deployment
+
+The url where the plataform can be accessed is https://media-meet.web.app
 
 ## Build
 

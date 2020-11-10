@@ -54,10 +54,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
           this.synchronizeQueue(e);
         });
         this.client.subscribe('/room/videoStatus/' + this.roomId, e => {
-          this.sinchronizeVideo(e);
+          this.synchronizeVideo(e);
         });
-        this.client.subscribe('/room/currentTime' + this.roomId, e => {
-          this.fetchVideo(e);
+        this.client.subscribe('/room/currentTime/' + this.roomId, e => {
+          this.videoFetch(e);
         });
         this.client.subscribe('/room/fetch/' + this.roomId, e => {
           this.fetch(e);
@@ -210,7 +210,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
   roomIdM(): void {
     console.log(this.roomId);
   }
-  private sinchronizeVideo(e): void {
+  private synchronizeVideo(e): void {
     const track = JSON.parse(e.body) as Media;
     if (!this.started) {
       this.currentTrack = track;
@@ -220,8 +220,23 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
   private putNextSong(e): void {
     const media = JSON.parse(e.body) as Media;
+    this.currentTrack = media;
     this.video = media.id;
     this.player.loadVideoById(media.id, media.time, 'large');
+  }
+  private videoFetch(e): void {
+    const promise = new Promise( resolve => {
+      setTimeout( () =>{
+        resolve();
+      }, 500);
+    });
+    promise.then(
+      () => {
+        const media = JSON.parse(e.body) as Media;
+        this.currentTrack = media;
+        this.video = media.id;
+        this.player.loadVideoById(media.id, media.time, 'large'); }
+    );
   }
   private synchronizeQueue(e): void {
     const queue = JSON.parse(e.body) as Media[];
@@ -230,7 +245,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
   private fetch(e): void{
     if (this.started){
       this.currentTrack.time = this.cleanTime();
-      this.client.publish({destination: '/app/currentTime/' + this.roomId, body: 'Time' + this.cleanTime()});
+      this.client.publish({destination: '/app/currentTime/' + this.roomId, body: JSON.stringify(this.currentTrack)});
     }
   }
   private changeState(e): void {
@@ -241,9 +256,6 @@ export class PlayerComponent implements OnInit, OnDestroy {
     } else if (e.body.split(' ')[0] === 'PAUSED' && this.playerState === 'PLAYING') {
       this.player.pauseVideo();
     }
-  }
-  private fetchVideo(e): void {
-    console.log(e.body);
   }
 
   ngOnDestroy(): void {

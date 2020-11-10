@@ -1,18 +1,56 @@
-<div class="container"
-     fxLayout
-     fxLayout.xs="column"
-     fxLayoutAlign="center"
-     fxLayoutGap="10px"
-     fxLayoutGap.xs="0" style="margin-top: 50px">
-  <div class="item item-1" fxFlex="10%">
+<div class="row overflow-hidden">
+  <table class="table table-striped queue my-2">
+    <tbody>
+    <tr>
+      <td class="row-title navbar-dark bg-dark text-left" style="width: 20%">
+        <div class="search-box">
+          <input type="text" class="search-txt" type="text" placeholder="Busca un video">
+          <a class="search-btn" href="#">
+            <i class="fa fa-search"></i>
+          </a>
+        </div>
+      </td>
+      <td class="row-title navbar-dark bg-dark text-right pr-0 paddingTd" style="width: 5%">
+        <div class="btn btn-dark btnNext" (click)="player.next()" *ngIf="player.currentTrack.title">
+          <img src="https://media.discordapp.net/attachments/352624122301513730/775738358160162816/next_1.png?width=475&height=475"
+               class="btnNextImg">
+        </div>
+      </td>
+      <td class="w-50 row-title navbar-dark bg-dark paddingTd" *ngIf="player.currentTrack.title">
+        <span class="time"><i class="fa fa-music"></i> Now Playing</span>
+        <p class="row-title-text row-title-style">
+          {{player.currentTrack.title}}
+        </p>
+      </td>
+      <td class="w-25 row-title navbar-dark bg-dark paddingTd pl-0" *ngIf="player.currentTrack.title">
+        <span class="time"><i class="fa fa-clock-o"></i> {{player.currentTrack.duration}}</span>
+      </td>
+    </tr>
+  </table>
+  <div class="col-lg-8 box">
+    <div class="inner"><app-player [roomId]=roomId></app-player></div>
   </div>
-  <div class="item item-2" fxFlex="10%" fxFlexOrder="3">
+  <div class="col-lg-4 box">
+    <app-chat [roomId]=roomId (onChange)="onChatChange($event)"></app-chat>
+  </div>
+  <div class="row justify-content-center">
+    <a href="" class ="btnCool btn1 my-2">Queue <span><i class="fa fa-music"></i></span></a>
 
+    <table class="table table-striped queue">
+      <tbody>
+      <tr *ngFor="let video of player.videos  | paginate: { itemsPerPage: 3, currentPage: p }">
+        <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
+        <td class="row-time">{{video.duration}}</td>
+      </tr>
+      </tbody>
+    </table>
+    <pagination-controls (pageChange)="p = $event"
+                         directionLinks="false"
+                         autoHide="true"
+                         responsive="true"
+    ></pagination-controls>
   </div>
-  <div class="item item-3" fxFlex="80%">
-    <div class="container" >
-      <app-player [roomId] = roomId></app-player>
-    </div>
-  </div>
-
 </div>
+
+
+

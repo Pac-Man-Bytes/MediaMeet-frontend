@@ -11,9 +11,11 @@ import * as firebase from 'firebase';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  public name: string = '';
   public email: string = '';
   public passwd: string = '';
   public errorMssg: string = '';
+  public isError: boolean;
 
   constructor(private authService: AuthService, private router: Router, private profileService: ProfileService) {
   }
@@ -22,15 +24,45 @@ export class RegisterComponent implements OnInit {
   }
 
   onUserRegister(): void {
-    this.authService.registerUser(this.email, this.passwd)
+    this.authService.registerUser(this.email, this.passwd,this.name)
       .then((res) => {
-        const profile = new Profile();
-        profile.id = firebase.auth().currentUser.uid;
-        profile.nickname = firebase.auth().currentUser.displayName;
-        this.profileService.createProfile(profile);
         this.router.navigate(['/']);
       }).catch(error => {
       this.errorMssg = error;
+    });
+  }
+
+  onLoginGoogle(): void {
+    this.authService.loginGoogleUser()
+      .then((res) => {
+        console.log('resUser', res);
+        this.router.navigate(['preroom']);
+        console.log(firebase.auth().currentUser.uid);
+      }).catch(err => {
+      this.isError = true;
+      this.errorMssg = err;
+    });
+  }
+
+  onLoginFacebook(): void {
+    this.authService.loginFacebookUser()
+      .then((res) => {
+        console.log(firebase.auth().currentUser.uid);
+        this.router.navigate(['preroom']);
+      }).catch(err => {
+      this.isError = true;
+      this.errorMssg = err;
+    });
+  }
+
+  onLoginGitHub(): void {
+    this.authService.loginGitHubUser()
+      .then((res) => {
+        console.log(firebase.auth().currentUser.uid);
+        this.router.navigate(['preroom']);
+      }).catch(err => {
+      this.isError = true;
+      this.errorMssg = err;
     });
   }
 
