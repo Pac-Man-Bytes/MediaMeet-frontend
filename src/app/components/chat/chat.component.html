@@ -7,11 +7,11 @@
     <mat-list role="list" *ngFor="let message of messages">
       <mat-list-item role="listitem">
         <span *ngIf="message.type =='NEW_USER'">
-          @ <span [ngStyle]="{'color':message.color}">{{message.username}}</span>
+          @ <span [ngStyle]="{'color':message.color}">{{message.profile.nickname}}</span>
           {{message.text}} </span>
         <span *ngIf="message.type =='MESSAGE'" class="badge badge-pill badge-light w-100 my-1 connectMessage">
-          <img src="https://centromedicomontemar.cl/wp-content/uploads/2015/06/sin-perfil.png" class="profileImage">
-          <span [ngStyle]="{'color':message.color}">{{message.username}}</span><br>
+          <img [src]="message.profile.photo" class="profileImage">
+          <span [ngStyle]="{'color':message.color}">{{message.profile.nickname}}</span><br>
           <span class="chatMessage">{{message.text}}</span>
         </span>
       </mat-list-item>
