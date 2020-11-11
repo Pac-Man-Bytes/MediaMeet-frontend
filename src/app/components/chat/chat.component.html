@@ -1,29 +1,33 @@
 <div class="card">
-  <div class="card-header p-0 justify-content-center">
-    <h1 class="my-0 p-0 text-center">Chat</h1>
+  <div class="card-header p-0 justify-content-center headerChat">
+    <h1 class="my-0 p-3 headerChatText">Room Chat</h1>
   </div>
-  <div #scrollChat [scrollTop]="scrollChat.scrollHeight" class="card-body" style="
-  overflow-y: scroll; height:180px"
+  <div #scrollChat [scrollTop]="scrollChat.scrollHeight" class="card-body chatC chatScroll"
        *ngIf="connected">
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item list-group-item-light" *ngFor="let message of messages">
-        <span *ngIf="message.type =='NEW_USER'">{{message.date | date:'shortTime'}}
-          @ <span [ngStyle]="{'color':message.color}">{{message.username}}</span>
+    <mat-list role="list" *ngFor="let message of messages">
+      <mat-list-item role="listitem">
+        <span *ngIf="message.type =='NEW_USER'">
+          @ <span [ngStyle]="{'color':message.color}">{{message.profile.nickname}}</span>
           {{message.text}} </span>
-        <span *ngIf="message.type =='MESSAGE'">{{message.date | date:'shortTime'}}
-          <span [ngStyle]="{'color':message.color}">{{message.username}}</span> dice:<br>
-          {{message.text}}</span>
-      </li>
-    </ul>
+        <span *ngIf="message.type =='MESSAGE'" class="badge badge-pill badge-light w-100 my-1 connectMessage">
+          <img [src]="message.profile.photo" class="profileImage">
+          <span [ngStyle]="{'color':message.color}">{{message.profile.nickname}}</span><br>
+          <span class="chatMessage">{{message.text}}</span>
+        </span>
+      </mat-list-item>
+    </mat-list>
   </div>
   <div class="card-footer" *ngIf="connected">
-    <form class="form-inline">
-      <div class="form-group mx-3">
-        <input type="text" class="form-control" placeholder="Escribe un mensaje..." name="texto"
+    <form class="form-inline" #form="ngForm"
+          (keydown.enter)="sendMessage()">
+      <div class="form-group inputChat">
+        <input type="text" class="form-control w-100" placeholder="Escribe un mensaje..." name="texto"
                [(ngModel)]="message.text" (keyup)="writingEvent()">
       </div>
-      <button class="btn btn-primary" type="submit" (click)="sendMessage()">Enviar</button>
+      <div class="sendButton" (click)="sendMessage()">
+        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/104946/ic_send_white_48dp.png" class="sendImage">
+      </div>
     </form>
-    <div>{{writing}}</div>
+
   </div>
 </div>

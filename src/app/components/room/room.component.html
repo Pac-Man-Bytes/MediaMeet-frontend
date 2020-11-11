@@ -1,33 +1,55 @@
+<app-queue *ngIf="modalOpen" [videos] = "player.videos"></app-queue>
 <div class="row overflow-hidden">
 
-  <div class="col-lg-9 bg-dark justify-content-center">
-    <app-player [roomId]=roomId></app-player>
+  <table class="table table-striped queue my-0">
+    <tbody>
+    <tr>
+
+      <td class="navbar-dark bg-dark pt-0 searchTd" style="color: #D9D9D9;font-weight: 600;font-size: 17px">
+        <div class="wrapper bg-dark">
+          <div class="input-data bg-dark">
+            <input #videoI type="text" class="bg-dark inputsito" required
+                   (keyup.enter)="onEnter(videoI.value);">
+            <div class="underline">
+            </div>
+            <label>Busca un video 📹</label>
+          </div>
+        </div>
+      </td>
+      <td class="row-title navbar-dark bg-dark text-left pr-0 paddingTd nextTd">
+        <div class="btn btn-dark btnNext" (click)="player.next()">
+          <img
+            src="https://media.discordapp.net/attachments/352624122301513730/775738358160162816/next_1.png?width=475&height=475"
+            class="btnNextImg">
+        </div>
+      </td>
+      <td class="row-title navbar-dark bg-dark paddingTd messageTd">
+        <span class="time nowPlaying"><i class="fa fa-music"></i> Now Playing</span>
+        <p class="row-title-text row-title-style">
+          {{player.currentTrack.title}}
+        </p>
+      </td>
+      <td class="row-title navbar-dark bg-dark paddingTd pl-0 durationTd" >
+        <span class="time"><i class="fa fa-clock-o"></i> {{player.currentTrack.duration}}</span>
+      </td>
+    </tr>
+  </table>
+  <div class="col-lg-8 box">
+    <div class="inner">
+      <app-player [roomId]=roomId></app-player>
+    </div>
   </div>
-  <div class="col-lg-3 justify-content-center">
-    <p>Queue<span>🎵 <button class="btn btn-dark" (click)="player.next()">Next</button></span></p>
+  <div class="col-lg-4 box">
+    <app-chat [roomId]=roomId (onChange)="onChatChange($event)"></app-chat>
+  </div>
+  <div class="row justify-content-center">
+    <a class ="btnCool btn1 my-2" (click)="abrirModal()">QUEUE <span><i class="fa fa-music"></i></span></a>
 
     <table class="table table-striped queue">
       <tbody>
-      <tr>
-        <td class="row-title"><p class="row-title-text row-title-style">{{player.currentTrack.title}}</p></td>
-        <td class="row-time">{{player.currentTrack.duration}}</td>
-      </tr>
-      <tr *ngFor="let video of player.videos  | paginate: { itemsPerPage: 3, currentPage: p }">
-        <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
-        <td class="row-time">{{video.duration}}</td>
-      </tr>
       </tbody>
     </table>
-    <pagination-controls (pageChange)="p = $event"
-                         directionLinks="false"
-                         autoHide="true"
-                         responsive="true"
-    ></pagination-controls>
   </div>
-
-</div>
-<div class="row justify-content-center">
-  <app-chat [roomId] = roomId (onChange)="onChatChange($event)"></app-chat>
 </div>
 
 

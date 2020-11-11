@@ -12,7 +12,10 @@ import swal from 'sweetalert2';
 export class MediaService {
   public urlEndPoint = 'https://mediameet-backend.herokuapp.com/api/media/youtube';
   // public urlEndPoint = 'http://localhost:8080/api/media/youtube';
-  constructor(private http: HttpClient, private router: Router) {}
+
+  constructor(private http: HttpClient, private router: Router) {
+  }
+
   getVideo(query: string): Observable<Media> {
     const text = '?query='.concat(query);
     return this.http.get<Media>(`${this.urlEndPoint}/${text}`).pipe(

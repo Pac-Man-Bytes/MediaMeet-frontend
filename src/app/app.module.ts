@@ -17,12 +17,11 @@ import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {AngularFireAuth} from '@angular/fire/auth';
-
 // Services
 import {MediaService} from './services/media.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {MatInputModule} from '@angular/material/input';
-
+import { QueueComponent } from './components/room/queue/queue.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +32,8 @@ import {MatInputModule} from '@angular/material/input';
     LoginComponent,
     RegisterComponent,
     Page404Component,
-    ChatComponent
+    ChatComponent,
+    QueueComponent
   ],
   imports: [
     BrowserModule,

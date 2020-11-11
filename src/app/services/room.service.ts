@@ -5,6 +5,7 @@ import {Room} from '../clases/room';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import swal from 'sweetalert2';
+import {Profile} from '../clases/profile';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +33,9 @@ export class RoomService {
         return throwError(e);
       })
     );
+  }
+
+  addRoomMember(id: string, profile: Profile): Observable<unknown> {
+    return this.http.patch<unknown>(`${this.curlEndPoint}/room/${id}`, profile, {headers: this.httpHeaders});
   }
 }
