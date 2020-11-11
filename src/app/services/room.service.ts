@@ -5,6 +5,7 @@ import {Room} from '../clases/room';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import swal from 'sweetalert2';
+import {Profile} from '../clases/profile';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ import swal from 'sweetalert2';
 export class RoomService {
 
   curlEndPoint = 'http://localhost:8080/api/rooms';
-  //curlEndPoint = 'https://mediameet-backend.herokuapp.com/api/rooms';
+  // curlEndPoint = 'https://mediameet-backend.herokuapp.com/api/rooms';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient, private router: Router) {
@@ -32,5 +33,9 @@ export class RoomService {
         return throwError(e);
       })
     );
+  }
+
+  addRoomMember(id: string, profile: Profile): Observable<unknown> {
+    return this.http.patch<unknown>(`${this.curlEndPoint}/room/${id}`, profile, {headers: this.httpHeaders});
   }
 }
