@@ -53,7 +53,7 @@ export class RoomComponent implements OnInit {
     this.profileService.getProfile(firebase.auth().currentUser.uid).subscribe(profile => {
       this.roomServices.addRoomMember(this.roomId, profile).subscribe(res => {
         this.roomServices.getRoom(this.roomId).subscribe(room => {
-          this.profileService.addProfileRoom(profile.id, room).subscribe(y =>{
+         this.profileService.addProfileRoom(profile.id, room).subscribe(y =>{
           });
         });
       });
