@@ -23,11 +23,11 @@ export class ProfileService{
   getProfile(id: string): Observable<Profile>{
     return this.http.get<Profile>(`${this.urlEndPoint}/${id}`).pipe(
       catchError(e => {
-        if (e.status === 400) {
-          return throwError(e);
+        if (e.status === 404) {
+          return null;
         }
         console.error(e.error.mensaje);
-        swal.fire(e.error.mensaje, 'error');
+        //swal.fire(e.error.mensaje, 'error');
         return throwError(e);
       })
     );

@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   errorGet: string;
   UDI: string;
   UName: string;
+  profile: Profile;
 
   constructor(private roomService: RoomService, private router: Router, private oAuth: AngularFireAuth, private profileServices: ProfileService) {
     this.room = new Room();
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUID();
+    this.registerProfile();
   }
 
   redirectToRoom(roomId): void {
@@ -58,5 +60,15 @@ export class HomeComponent implements OnInit {
   }
   getUID(): void {
     console.log(firebase.auth().currentUser);
+  }
+
+  registerProfile(): void{
+    const currentUser = firebase.auth().currentUser;
+    this.profile = new Profile();
+    this.profile.id = currentUser.uid;
+    this.profile.nickname = currentUser.displayName;
+    this.profile.photo = currentUser.photoURL;
+    this.profile.rooms = [];
+    this.profileServices.createProfile(this.profile);
   }
 }
