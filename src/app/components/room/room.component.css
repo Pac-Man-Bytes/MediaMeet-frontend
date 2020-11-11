@@ -62,6 +62,7 @@
   padding: 8px 40px;
   overflow: hidden;
   transition: 1s all ease;
+  cursor: pointer;
 }
 
 .btnCool:before {
@@ -116,21 +117,12 @@ td {
 
 }
 
-.paddingTd {
-  padding-top: 8px;
-  padding-bottom: 8px;
 
-@media only screen and (min-width: 601px) {
-  .paddingTd {
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-}
 .wrapper{
-  width: 450px;
+  width: 200px;
+  padding-top: 16px;
   /*background: none;*/
-  padding: 30px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+
 }
 .inputsito:focus{
   outline: none;
@@ -140,6 +132,27 @@ td {
   height: 40px;
   width: 100%;
   position: relative;
+}
+@media only screen and (min-width: 601px) {
+  .paddingTd {
+    padding-top: 20px;
+    padding-bottom: 0px;
+  }
+  .messageTd{
+    width: 50%;
+  }
+  .searchTd{
+    width: 200px;
+    padding-right: 0px;
+  }
+  .nextTd{
+    width: 35px;
+    padding-left: 0px;
+  }
+  .durationTd{
+    width: 20%;
+  }
+}
 @media only screen and (max-width: 600px) {
   .paddingTd {
     padding-top: 15px;
@@ -147,6 +160,9 @@ td {
   }
   .nowPlaying{
     display: none;
+  }
+  .messageTd{
+    width: 35%;
   }
 
 }
@@ -159,8 +175,8 @@ td {
 }
 .input-data input:focus ~ label,
 .input-data input:valid ~ label{
-  transform: translateY(-20px);
-  font-size: 15px;
+  transform: translateY(-9px);
+  font-size: 0px;
   /*color: #4158d0;*/
 }
 .wrapper .input-data label{
@@ -192,6 +208,6 @@ td {
 .input-data input:valid ~ .underline:before{
   transform: scaleX(1);
 }
-}
+
 
 
