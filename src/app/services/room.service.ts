@@ -13,7 +13,7 @@ import {Profile} from '../clases/profile';
 export class RoomService {
 
   curlEndPoint = 'http://localhost:8080/api/rooms';
-  //curlEndPoint = 'https://mediameet-backend.herokuapp.com/api/rooms';
+  // curlEndPoint = 'https://mediameet-backend.herokuapp.com/api/rooms';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient, private router: Router) {
@@ -35,7 +35,7 @@ export class RoomService {
     );
   }
 
-  addRoomMember(id: string, profile: Profile): Observable<unknown>{
+  addRoomMember(id: string, profile: Profile): Observable<unknown> {
     return this.http.patch<unknown>(`${this.curlEndPoint}/room/${id}`, profile, {headers: this.httpHeaders});
   }
 }

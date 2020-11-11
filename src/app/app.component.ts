@@ -23,7 +23,6 @@ export class AppComponent implements OnInit, OnDestroy {
       map((results: MediaChange[]) => results[0])
     ).subscribe(
       (result: MediaChange) => {
-        console.log(result.mqAlias);
         this.deviceXs = result.mqAlias === 'xs';
       }
     );

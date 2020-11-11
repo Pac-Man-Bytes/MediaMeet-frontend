@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getUID();
     this.registerProfile();
   }
 
@@ -38,7 +37,7 @@ export class HomeComponent implements OnInit {
 
   createRoom(): void {
     this.profileServices.getProfile(firebase.auth().currentUser.uid).subscribe(res => {
-      this.cRoom.members.push(res);
+      // this.cRoom.members.push(res);
     });
     this.roomService.createRoom(this.cRoom).subscribe(resp => {
       swal.fire('Sala creada', resp.id, 'success');
@@ -58,17 +57,23 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
   getUID(): void {
     console.log(firebase.auth().currentUser);
   }
 
-  registerProfile(): void{
+  registerProfile(): void {
     const currentUser = firebase.auth().currentUser;
     this.profile = new Profile();
     this.profile.id = currentUser.uid;
     this.profile.nickname = currentUser.displayName;
     this.profile.photo = currentUser.photoURL;
     this.profile.rooms = [];
-    this.profileServices.createProfile(this.profile);
+    this.profileServices.createProfile(this.profile).subscribe(resp => {
+      },
+      error => {
+        console.log(error);
+        this.errorGet = error.error.message as string;
+      });
   }
 }
