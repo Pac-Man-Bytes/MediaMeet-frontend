@@ -3,7 +3,6 @@ import * as SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 import {Message} from '../../clases/message';
 import * as firebase from 'firebase';
-import {PlayerComponent} from '../player/player.component';
 import {ProfileService} from '../../services/profile.service';
 import {Profile} from '../../clases/profile';
 
@@ -20,8 +19,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   public messages: Message[] = [];
   public profile: Profile = new Profile();
   @Output() private onChange: EventEmitter<string> = new EventEmitter<string>();
-  public url = 'https://mediameet-backend.herokuapp.com';
-  // public url = 'http://localhost:8080';
+  // public url = 'https://mediameet-backend.herokuapp.com';
+  public url = 'http://localhost:8080';
   public writing: string;
   @Input() roomId: string;
 
@@ -44,20 +43,36 @@ export class ChatComponent implements OnInit, OnDestroy {
       });
       this.client.subscribe('/room/chat/' + this.roomId + '/writing', e => {
         this.writing = e.body;
-        console.log(e.body + '----------');
         setTimeout(() => this.writing = '', 3000);
       });
 
       this.client.subscribe('/room/chat/' + this.roomId + '/history', e => {
-        const history = JSON.parse(e.body) as Message[];
-        this.messages = history.map(m => {
-          m.date = new Date();
-          return m;
+        const promise1 = new Promise(resolve => {
+          setTimeout(() => {
+            resolve();
+          }, 50);
         });
+        promise1.then(
+          () => {
+            const history = JSON.parse(e.body) as Message[];
+            this.messages = history.map(m => {
+              m.date = new Date();
+              return m;
+            });
+          }
+        );
       });
       this.client.publish({destination: '/app/chat/' + this.roomId + '/history', body: firebase.auth().currentUser.uid});
       this.message.type = 'NEW_USER';
-      this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
+
+      const promise = new Promise(resolve => {
+        resolve();
+      });
+      promise.then(
+        () => {
+          this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
+        }
+      );
     };
     this.client.onDisconnect = (frame) => {
       this.connected = false;
@@ -68,8 +83,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private listenMessages(e): void {
+    console.log(e.body);
     const message: Message = JSON.parse(e.body) as Message;
     message.date = new Date(message.date);
+
     if (!this.message.color && message.type === 'NEW_USER' && this.message.username === message.username) {
       this.message.color = message.color;
     }
@@ -92,10 +109,17 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   sendMessage(): void {
-    this.message.type = 'MESSAGE';
-    console.log();
-    this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
-    this.message.text = '';
+
+    const promise = new Promise(resolve => {
+      resolve();
+    });
+    promise.then(
+      () => {
+        this.message.type = 'MESSAGE';
+        this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
+        this.message.text = '';
+      }
+    );
   }
 
   ngOnDestroy(): void {
@@ -104,14 +128,11 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   private setMessageUser(): void {
     this.profileServices.getProfile(firebase.auth().currentUser.uid).subscribe(res => {
-        console.log('chi');
-        console.log(res);
         this.profile.nickname = res.nickname;
         this.profile.photo = res.photo;
         this.profile.id = res.id;
         this.message.username = this.profile.nickname;
         this.message.profile = this.profile;
-        console.log(this.message.username);
         this.message.date = new Date();
       },
       error => {
