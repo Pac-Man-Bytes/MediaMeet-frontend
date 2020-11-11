@@ -4,6 +4,8 @@ import {Client} from '@stomp/stompjs';
 import {Message} from '../../clases/message';
 import * as firebase from 'firebase';
 import {PlayerComponent} from '../player/player.component';
+import {ProfileService} from '../../services/profile.service';
+import {Profile} from '../../clases/profile';
 
 @Component({
   selector: 'app-chat',
@@ -16,13 +18,15 @@ export class ChatComponent implements OnInit, OnDestroy {
   public connected: boolean;
   public message: Message = new Message();
   public messages: Message[] = [];
+  public profile: Profile = new Profile();
   @Output() private onChange: EventEmitter<string> = new EventEmitter<string>();
   public url = 'https://mediameet-backend.herokuapp.com';
   // public url = 'http://localhost:8080';
   public writing: string;
   @Input() roomId: string;
 
-  constructor() {
+  constructor(private profileServices: ProfileService) {
+    this.profile = new Profile();
   }
 
   ngOnInit(): void {
@@ -89,6 +93,7 @@ export class ChatComponent implements OnInit, OnDestroy {
 
   sendMessage(): void {
     this.message.type = 'MESSAGE';
+    console.log();
     this.client.publish({destination: '/app/chat/' + this.roomId, body: JSON.stringify(this.message)});
     this.message.text = '';
   }
@@ -98,7 +103,19 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private setMessageUser(): void {
-    this.message.username = firebase.auth().currentUser.displayName;
-    this.message.date = new Date();
+    this.profileServices.getProfile(firebase.auth().currentUser.uid).subscribe(res => {
+        console.log('chi');
+        console.log(res);
+        this.profile.nickname = res.nickname;
+        this.profile.photo = res.photo;
+        this.profile.id = res.id;
+        this.message.username = this.profile.nickname;
+        this.message.profile = this.profile;
+        console.log(this.message.username);
+        this.message.date = new Date();
+      },
+      error => {
+        console.log(error);
+      });
   }
 }

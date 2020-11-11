@@ -90,7 +90,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
           onReady: (e) => {
             if (!this.reframed) {
               this.reframed = true;
-              reframe(e.target.a);
+              try {
+                reframe(e.target.a);
+              } catch (e) {
+              }
             }
           }
         }

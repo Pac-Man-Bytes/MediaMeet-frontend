@@ -37,8 +37,12 @@ export class HomeComponent implements OnInit {
 
   createRoom(): void {
     this.profileServices.getProfile(firebase.auth().currentUser.uid).subscribe(res => {
-      // this.cRoom.members.push(res);
-    });
+        console.log('chi');
+        console.log(res);
+      },
+      error => {
+        console.log(error);
+      });
     this.roomService.createRoom(this.cRoom).subscribe(resp => {
       swal.fire('Sala creada', resp.id, 'success');
       this.cRoom.id = resp.id;
