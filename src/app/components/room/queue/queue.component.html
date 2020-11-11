@@ -2,9 +2,9 @@
   <div *ngIf="queueService.modal" class="modal" tabindex="-1" role="dialog" style="display:block;">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Queue</h5>
-          <button (click)="cerrarModal()" type="button"  class="close" data-dismiss="modal" aria-label="Close">
+        <div class="modal-header header">
+          <h5 class="modal-title headerText">Queue</h5>
+          <button (click)="cerrarModal()" type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -13,11 +13,12 @@
             <div class="row">
               <div class="col-sm">
 
-                <table class="table table-striped queue">
+                <table class="table table-striped queue" style="position: relative">
                   <tbody>
                   <tr *ngFor="let video of videos  | paginate: { itemsPerPage: 3, currentPage: p }">
                     <td class="row-image"><img src="{{video.image}}"></td>
-                    <td class="row-title"><p class="row-title-style">{{video.title}}</p></td>
+                    <td class="row-title"><p class="row-title-style"
+                                             style="overflow-x:hidden;white-space: pre-wrap;">{{video.title}}</p></td>
                     <td class="row-time">{{video.duration}}</td>
                   </tr>
                   </tbody>
