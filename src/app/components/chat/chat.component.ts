@@ -19,8 +19,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   public messages: Message[] = [];
   public profile: Profile = new Profile();
   @Output() private onChange: EventEmitter<string> = new EventEmitter<string>();
-  // public url = 'https://mediameet-backend.herokuapp.com';
-  public url = 'http://localhost:8080';
+  public url = 'https://mediameet-backend.herokuapp.com';
+  // public url = 'http://localhost:8080';
   public writing: string;
   @Input() roomId: string;
 
