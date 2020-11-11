@@ -16,11 +16,13 @@ export class RoomComponent implements OnInit {
   public p = 1;
   modalOpen: boolean;
   inputVideo: string;
+  errorGet: string;
   @ViewChild('videoI') videoI: ElementRef;
   @Output() pageChange: EventEmitter<number>;
   @Output() pageBoundsCorrection: EventEmitter<number>;
   @ViewChild(PlayerComponent, {static: true}) player: PlayerComponent;
-  constructor(private route: ActivatedRoute, private queueService: QueueService, private roomServices: RoomService, private profileService: ProfileService) {
+  constructor(private route: ActivatedRoute, private queueService: QueueService,
+              private roomServices: RoomService, private profileService: ProfileService) {
     this.route.params.subscribe(params => {
       this.roomId = params['roomId'];
     });
@@ -48,17 +50,18 @@ export class RoomComponent implements OnInit {
     this.videoI.nativeElement.value = '';
   }
   addMember(): void{
-    const profile = this.profileService.getProfile(firebase.auth().currentUser.uid).subscribe(res => {
+    this.profileService.getProfile(firebase.auth().currentUser.uid).subscribe(profile => {
+      this.roomServices.addRoomMember(this.roomId, profile).subscribe(res => {
+        this.roomServices.getRoom(this.roomId).subscribe(room => {
+          this.profileService.addProfileRoom(profile.id, room).subscribe(y =>{
+          });
+        });
+      });
     }, error => {
       console.log(error);
       this.errorGet = error.error.message as string;
     });
-    this.roomServices.addRoomMember(this.roomId, profile).subscribe(res => {
-      },
-      error => {
-        console.log(error);
-        this.errorGet = error.error.message as string;
-    });
+
   }
 
 }
