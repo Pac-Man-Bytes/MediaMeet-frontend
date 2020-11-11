@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {PlayerComponent} from '../player/player.component';
 import {QueueService} from './queue/queue.service';
@@ -12,6 +12,8 @@ export class RoomComponent implements OnInit {
   public roomId;
   public p = 1;
   modalOpen: boolean;
+  inputVideo: string;
+  @ViewChild('videoI') videoI: ElementRef;
   @Output() pageChange: EventEmitter<number>;
   @Output() pageBoundsCorrection: EventEmitter<number>;
   @ViewChild(PlayerComponent, {static: true}) player: PlayerComponent;
@@ -36,6 +38,10 @@ export class RoomComponent implements OnInit {
   abrirModal(): void{
     this.queueService.abrirModal();
     this.modalOpen = true;
+  }
+  onEnter(query): void{
+    this.player.onEnter(query);
+    this.videoI.nativeElement.value = '';
   }
 
 }
