@@ -2,6 +2,9 @@ import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} f
 import {ActivatedRoute} from '@angular/router';
 import {PlayerComponent} from '../player/player.component';
 import {QueueService} from './queue/queue.service';
+import {RoomService} from '../../services/room.service';
+import {ProfileService} from '../../services/profile.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-room',
@@ -17,12 +20,13 @@ export class RoomComponent implements OnInit {
   @Output() pageChange: EventEmitter<number>;
   @Output() pageBoundsCorrection: EventEmitter<number>;
   @ViewChild(PlayerComponent, {static: true}) player: PlayerComponent;
-  constructor(private route: ActivatedRoute, private queueService: QueueService) {
+  constructor(private route: ActivatedRoute, private queueService: QueueService, private roomServices: RoomService, private profileService: ProfileService) {
     this.route.params.subscribe(params => {
       this.roomId = params['roomId'];
     });
   }
   ngOnInit(): void {
+    this.addMember();
   }
   onChatChange(message): void {
     if (message.substr(0, 8).toLowerCase() === '/youtube' && message.substr(9) !== '') {
@@ -42,6 +46,19 @@ export class RoomComponent implements OnInit {
   onEnter(query): void{
     this.player.onEnter(query);
     this.videoI.nativeElement.value = '';
+  }
+  addMember(): void{
+    const profile = this.profileService.getProfile(firebase.auth().currentUser.uid).subscribe(res => {
+    }, error => {
+      console.log(error);
+      this.errorGet = error.error.message as string;
+    });
+    this.roomServices.addRoomMember(this.roomId, profile).subscribe(res => {
+      },
+      error => {
+        console.log(error);
+        this.errorGet = error.error.message as string;
+    });
   }
 
 }
