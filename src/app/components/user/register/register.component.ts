@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
   onUserRegister(): void {
     this.authService.registerUser(this.email, this.passwd,this.name)
       .then((res) => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/preroom']);
       }).catch(error => {
       this.errorMssg = error;
     });
