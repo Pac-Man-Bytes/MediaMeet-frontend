@@ -13,7 +13,7 @@ import {Profile} from '../clases/profile';
 export class RoomService {
 
   // curlEndPoint = 'http://localhost:8080/api/rooms';
-  curlEndPoint = 'http://3.214.184.178:8080/api/rooms';
+  curlEndPoint = 'http://MediaMeet-LB-1132169012.us-east-1.elb.amazonaws.com/api/rooms';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient, private router: Router) {
