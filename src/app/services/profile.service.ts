@@ -13,7 +13,7 @@ import {Room} from '../clases/room';
 export class ProfileService {
 
   // public urlEndPoint = 'http://localhost:8080/api/profiles';
-  urlEndPoint = 'http://3.214.184.178:8080/api/profiles';
+  urlEndPoint = 'http://MediaMeet-LB-1132169012.us-east-1.elb.amazonaws.com/api/profiles';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient, private router: Router) {
