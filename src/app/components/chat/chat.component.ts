@@ -19,7 +19,7 @@ export class ChatComponent implements OnInit, OnDestroy {
   public messages: Message[] = [];
   public profile: Profile = new Profile();
   @Output() private onChange: EventEmitter<string> = new EventEmitter<string>();
-  public url = 'https://mediameet-backend.herokuapp.com';
+  public url = 'http://MediaMeet-LB-1132169012.us-east-1.elb.amazonaws.com';
   // public url = 'http://localhost:8080';
   public writing: string;
   @Input() roomId: string;
@@ -83,7 +83,6 @@ export class ChatComponent implements OnInit, OnDestroy {
   }
 
   private listenMessages(e): void {
-    console.log(e.body);
     const message: Message = JSON.parse(e.body) as Message;
     message.date = new Date(message.date);
 
