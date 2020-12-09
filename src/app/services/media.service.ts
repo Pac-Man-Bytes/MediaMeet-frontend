@@ -10,7 +10,7 @@ import swal from 'sweetalert2';
   providedIn: 'root'
 })
 export class MediaService {
-  public urlEndPoint = 'http://MediaMeet-LB-1132169012.us-east-1.elb.amazonaws.com/api/media/youtube';
+  public urlEndPoint = 'https://mediameet-backend.herokuapp.com/api/media/youtube';
   // public urlEndPoint = 'http://localhost:8080/api/media/youtube';
 
   constructor(private http: HttpClient, private router: Router) {
