@@ -6,7 +6,7 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "target": "media-meet",
+    "target":"media-meet",
     "rewrites": [
       {
         "source": "**",
