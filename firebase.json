@@ -1,7 +1,6 @@
 {
   "hosting": {
-    "public": "dist/MediaMeet-frontend",
-    "site": "media-meet",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
