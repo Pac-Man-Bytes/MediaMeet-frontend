@@ -13,7 +13,7 @@ import {Room} from '../clases/room';
 export class ProfileService {
 
   // public urlEndPoint = 'http://localhost:8080/api/profiles';
-  urlEndPoint = 'https://mediameet-backend.herokuapp.com/api/profiles';
+  urlEndPoint = 'https://mediameet-backend-e6a61d60cf37.herokuapp.com/api/profiles';
   private httpHeaders = new HttpHeaders({'Content-Type': 'application/json'});
 
   constructor(private http: HttpClient, private router: Router) {
