@@ -1,12 +1,12 @@
 {
   "hosting": {
     "public": "dist/MediaMeet-frontend",
+    "target": "partwizard",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "site":"media-meet",
     "rewrites": [
       {
         "source": "**",
